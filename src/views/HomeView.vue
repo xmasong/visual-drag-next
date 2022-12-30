@@ -28,6 +28,7 @@ import ComponentList from "@/components/ComponentList.vue";
 import ToolBarVue from "./ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
+import { useComponent } from "@/stores/canvas";
 
 function handleDrop(e: DragEvent) {
   e.preventDefault();
@@ -43,9 +44,11 @@ function handleDrop(e: DragEvent) {
 
     // // 根据画面比例修改组件样式比例 https://github.com/woai3c/visual-drag-demo/issues/91
     // changeComponentSizeWithScale(component);
-    console.log("@@@Drop: ", component);
+    const componentStore = useComponent();
+    componentStore.addComponent({ component });
 
-    // this.$store.commit("addComponent", { component });
+    console.log("@@@Drop: ", component, componentStore.componentData);
+
     // this.$store.commit("recordSnapshot");
   }
 }

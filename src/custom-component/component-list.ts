@@ -1,3 +1,5 @@
+import type { Component } from "@/types";
+
 // 公共样式
 export const commonStyle = {
   rotate: 0,
@@ -25,7 +27,7 @@ export const commonAttr = {
 };
 
 // 编辑器左侧组件列表
-const list = [
+const list: Component[] = [
   {
     component: "VText",
     label: "文字",
