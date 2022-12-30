@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, defineAsyncComponent } from "vue";
 import { createPinia } from "pinia";
 
 import App from "./App.vue";
@@ -16,3 +16,14 @@ app.use(router);
 app.use(ElementPlus);
 
 app.mount("#app");
+
+const components = ["Picture", "VButton"];
+
+components.forEach((key) => {
+  app.component(
+    key,
+    defineAsyncComponent(
+      () => import(`@/custom-component/${key}/Component.vue`)
+    )
+  );
+});

@@ -15,7 +15,7 @@
           @mousedown="handleMouseDown"
           @mouseup="deselectCurComponent"
         >
-          <!-- <Editor /> -->
+          <Editor />
         </div>
       </section>
       <!-- 右侧属性列表 -->
@@ -25,10 +25,12 @@
 </template>
 <script setup lang="ts">
 import ComponentList from "@/components/ComponentList.vue";
-import ToolBarVue from "./ToolBar.vue";
+import Editor from "@/components/Editor/Editor.vue";
+import ToolBarVue from "@/views/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
 import { useComponent } from "@/stores/canvas";
+import { nanoid } from "nanoid";
 
 function handleDrop(e: DragEvent) {
   e.preventDefault();
@@ -40,7 +42,7 @@ function handleDrop(e: DragEvent) {
     const component = cloneDeep(componentList[+index]);
     // component.style.top = e.clientY - rectInfo.y;
     // component.style.left = e.clientX - rectInfo.x;
-    // component.id = generateID();
+    component.id = nanoid();
 
     // // 根据画面比例修改组件样式比例 https://github.com/woai3c/visual-drag-demo/issues/91
     // changeComponentSizeWithScale(component);
