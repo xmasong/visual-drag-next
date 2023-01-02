@@ -31,17 +31,17 @@ import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
 import { useComponent } from "@/stores/canvas";
 import { nanoid } from "nanoid";
-
+import { $ } from "@/utils/utils";
 function handleDrop(e: DragEvent) {
   e.preventDefault();
   e.stopPropagation();
   let index: string = "";
   if (e.dataTransfer) index = e.dataTransfer.getData("index");
-  // const rectInfo = this.editor.getBoundingClientRect();
+  const rectInfo = $("#editor").getBoundingClientRect();
   if (index !== "") {
     const component = cloneDeep(componentList[+index]);
-    // component.style.top = e.clientY - rectInfo.y;
-    // component.style.left = e.clientX - rectInfo.x;
+    component.style.top = e.clientY - rectInfo.y + "px";
+    component.style.left = e.clientX - rectInfo.x + "px";
     component.id = nanoid();
 
     // // 根据画面比例修改组件样式比例 https://github.com/woai3c/visual-drag-demo/issues/91

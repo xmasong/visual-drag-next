@@ -15,6 +15,7 @@ export default {
 
 <style lang="scss">
 .v-button {
+  position: absolute;
   display: inline-block;
   white-space: nowrap;
   cursor: pointer;

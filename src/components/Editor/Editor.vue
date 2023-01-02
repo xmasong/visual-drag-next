@@ -1,5 +1,5 @@
 <template>
-  <div class="editor">
+  <div class="editor" id="editor">
     <component
       v-for="item in componentData"
       :key="item.id"
@@ -11,8 +11,10 @@
 </template>
 <script setup lang="ts">
 import { useComponent } from "@/stores/canvas";
+import { storeToRefs } from "pinia";
 
-const { componentData } = useComponent();
+const componentStore = useComponent();
+const { componentData } = storeToRefs(componentStore);
 </script>
 <style lang="scss">
 .editor {

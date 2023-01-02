@@ -5,5 +5,5 @@ export interface Component {
   propValue: string | Record<string, any>;
   icon: string;
   request?: Record<string, any>;
-  style?: Record<string, any>;
+  style: Record<string, any>;
 }
