@@ -40,8 +40,8 @@ function handleDrop(e: DragEvent) {
   const rectInfo = $("#editor").getBoundingClientRect();
   if (index !== "") {
     const component = cloneDeep(componentList[+index]);
-    component.style.top = e.clientY - rectInfo.y + "px";
-    component.style.left = e.clientX - rectInfo.x + "px";
+    component.style.top = e.clientY - rectInfo.y;
+    component.style.left = e.clientX - rectInfo.x;
     component.id = nanoid();
 
     // // 根据画面比例修改组件样式比例 https://github.com/woai3c/visual-drag-demo/issues/91

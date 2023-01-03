@@ -59,8 +59,8 @@ const list: Component[] = [
     propValue: "按钮",
     icon: "button",
     style: {
-      width: "100px",
-      height: "34px",
+      width: 100,
+      height: 34,
       borderWidth: 1,
       borderColor: "",
       borderRadius: "",

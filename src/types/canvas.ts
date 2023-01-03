@@ -7,3 +7,15 @@ export interface Component {
   request?: Record<string, any>;
   style: Record<string, any>;
 }
+
+export interface ComponentParams {
+  component: Component;
+  index?: number;
+}
+export interface Pos {
+  top?: number;
+  left?: number;
+  width?: number;
+  height?: number;
+  rotate?: number;
+}
