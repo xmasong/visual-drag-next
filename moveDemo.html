@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    body {
+      position: relative;
+    }
+    #cube {
+      position: absolute;
+    }
+  </style>
+</head>
+<body>
+  <button id="cube">i can move by mouse</button>
+  <script type="module">
+    const el = document.querySelector('#cube');
+
+    el.addEventListener("mousedown", handleMouseDown)
+    function handleMouseDown(e) {
+      e.stopPropagation();
+
+      const pos = { top: el.style.top.slice(0,-2), left: el.style.left.slice(0,-2), };
+      console.log("pos", pos);
+
+      const startY = e.clientY;
+      const startX = e.clientX;
+      // 如果直接修改属性，值的类型会变为字符串，所以要转为数值型
+      const startTop = Number(pos.top);
+      const startLeft = Number(pos.left);
+
+      const move = (moveEvent) => {
+        pos.top = moveEvent.clientY - startY + startTop;
+        pos.left = moveEvent.clientX - startX + startLeft;
+
+        el.style.top = pos.top + "px";
+        el.style.left = pos.left + "px";
+      };
+
+      const up = () => {
+        document.removeEventListener("mousemove", move);
+        document.removeEventListener("mouseup", up);
+      };
+
+      document.addEventListener("mousemove", move);
+      document.addEventListener("mouseup", up);
+    }
+  </script>
+</body>
+</html>

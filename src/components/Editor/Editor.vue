@@ -2,7 +2,7 @@
   <div class="editor" id="editor">
     <component
       v-for="(item, index) in componentData"
-      :key="item.id"
+      :key="`${item.id}+${fresh}`"
       :is="item.component"
       :style="getShapeStyle(item.style)"
       :propValue="item.propValue"
@@ -15,10 +15,12 @@ import { useComponent } from "@/stores/canvas";
 import type { Pos } from "@/types";
 import { storeToRefs } from "pinia";
 import { getShapeStyle } from "@/utils/style";
+import { ref } from "vue";
 
 const componentStore = useComponent();
 const { setCurComponent, setShapeStyle } = componentStore;
 const { componentData } = storeToRefs(componentStore);
+const fresh = ref(0);
 
 function handleMouseDown(e: MouseEvent, element, index) {
   e.stopPropagation();
@@ -36,6 +38,7 @@ function handleMouseDown(e: MouseEvent, element, index) {
   const startLeft = Number(pos.left);
 
   const move = (moveEvent: MouseEvent) => {
+    fresh.value++;
     const currX = moveEvent.clientX;
     const currY = moveEvent.clientY;
 
