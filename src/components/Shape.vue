@@ -1,5 +1,9 @@
 <template>
-  <div class="shape" @mousedown="handleMouseDownOnShape">
+  <div
+    class="shape"
+    @mousedown="handleMouseDownOnShape"
+    :style="getShapeStyle(element.style)"
+  >
     <slot></slot>
   </div>
 </template>
@@ -7,6 +11,7 @@
 import { useComponent } from "@/stores/canvas";
 import type { Pos, Component } from "@/types";
 import { ref } from "vue";
+import { getShapeStyle } from "@/utils/style";
 
 const componentStore = useComponent();
 const { setCurComponent, setShapeStyle } = componentStore;

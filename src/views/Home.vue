@@ -49,7 +49,7 @@ function handleDrop(e: DragEvent) {
     const componentStore = useComponent();
     componentStore.addComponent({ component });
 
-    console.log("@@@Drop: ", component, componentStore.componentData);
+    console.log("@@@Drop: ", component.style.top, component.style.left);
 
     // this.$store.commit("recordSnapshot");
   }
