@@ -29,9 +29,11 @@ import Editor from "@/components/Editor/Editor.vue";
 import ToolBarVue from "@/views/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
-import { useComponent } from "@/stores/canvas";
 import { nanoid } from "nanoid";
 import { $ } from "@/utils/utils";
+import { useComponent, useContextMenu } from "@/stores";
+import { storeToRefs } from "pinia";
+
 function handleDrop(e: DragEvent) {
   e.preventDefault();
   e.stopPropagation();
@@ -62,19 +64,25 @@ function handleDragOver(e: DragEvent) {
 }
 
 function handleMouseDown(e: MouseEvent) {
-  // e.stopPropagation();
-  // this.$store.commit("setClickComponentStatus", false);
+  e.stopPropagation();
+  const { setClickComponentStatus } = useComponent();
+  setClickComponentStatus(false);
   // this.$store.commit("setInEditorStatus", true);
 }
 
 function deselectCurComponent(e: MouseEvent) {
-  // if (!this.isClickComponent) {
-  //   this.$store.commit("setCurComponent", { component: null, index: null });
-  // }
-  // // 0 左击 1 滚轮 2 右击
-  // if (e.button != 2) {
-  //   this.$store.commit("hideContextMenu");
-  // }
+  const componentStore = useComponent();
+  const { isClickComponent } = storeToRefs(componentStore);
+  const { hideContextMenu } = useContextMenu();
+
+  console.log("@@@isClickComponent", isClickComponent.value);
+  if (!isClickComponent.value) {
+    componentStore.setCurComponent({ component: null, index: null });
+  }
+  // 0 左击 1 滚轮 2 右击
+  if (e.button != 2) {
+    hideContextMenu();
+  }
 }
 </script>
 <style lang="scss">

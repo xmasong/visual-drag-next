@@ -1,5 +1,6 @@
 export interface Component {
   id?: string;
+  isLock: boolean;
   component: string;
   label: string;
   propValue: string | Record<string, any>;
@@ -9,8 +10,8 @@ export interface Component {
 }
 
 export interface ComponentParams {
-  component: Component;
-  index?: number;
+  component: Component | null;
+  index?: number | null;
 }
 export interface Pos {
   top?: number;

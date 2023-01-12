@@ -14,7 +14,8 @@ import { ref } from "vue";
 import { getShapeStyle } from "@/utils/style";
 
 const componentStore = useComponent();
-const { setCurComponent, setShapeStyle } = componentStore;
+const { setCurComponent, setShapeStyle, setClickComponentStatus } =
+  componentStore;
 const fresh = ref(0);
 const { element, index } = defineProps({
   element: {
@@ -32,6 +33,7 @@ const { element, index } = defineProps({
 function handleMouseDownOnShape(e: MouseEvent) {
   e.stopPropagation();
 
+  setClickComponentStatus(true);
   setCurComponent({
     component: element as Component,
     index,

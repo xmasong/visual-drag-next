@@ -1,5 +1,6 @@
 <template>
   <div class="editor" id="editor" @contextmenu="handleContextMenu">
+    <!--页面组件列表展示-->
     <Shape
       v-for="(item, index) in componentData"
       :key="`${item.id}`"
@@ -8,16 +9,17 @@
     >
       <component :is="item.component" :propValue="item.propValue" />
     </Shape>
+    <!-- 右击菜单 -->
+    <ContextMenu />
   </div>
 </template>
 <script setup lang="ts">
-import { useComponent } from "@/stores/canvas";
-import { storeToRefs } from "pinia";
-import Shape from "../Shape.vue";
+import { useComponent, useContextMenu } from "@/stores/index";
+import Shape from "./Shape.vue";
+import ContextMenu from "../ContextMenu.vue";
 
-const componentStore = useComponent();
-// const { setCurComponent, setShapeStyle } = componentStore;
-const { componentData } = storeToRefs(componentStore);
+const { componentData } = useComponent();
+const { showContextMenu } = useContextMenu();
 
 function handleContextMenu(e) {
   e.stopPropagation();
@@ -37,7 +39,7 @@ function handleContextMenu(e) {
     target = target.parentNode;
   }
 
-  // this.$store.commit("showContextMenu", { top, left });
+  showContextMenu({ top, left });
 }
 </script>
 <style lang="scss">
