@@ -2,7 +2,7 @@
   <div
     class="shape"
     @mousedown="handleMouseDownOnShape"
-    :style="getShapeStyle(element.style)"
+    :style="getShapeStyle(store.element.style)"
   >
     <slot></slot>
   </div>
@@ -17,7 +17,7 @@ const componentStore = useComponent();
 const { setCurComponent, setShapeStyle, setClickComponentStatus } =
   componentStore;
 const fresh = ref(0);
-const { element, index } = defineProps({
+const store = defineProps({
   element: {
     required: true,
     type: Object,
@@ -35,11 +35,11 @@ function handleMouseDownOnShape(e: MouseEvent) {
 
   setClickComponentStatus(true);
   setCurComponent({
-    component: element as Component,
-    index,
+    component: store.element as Component,
+    index: store.index,
   });
 
-  const pos: Pos = { ...element.style };
+  const pos: Pos = { ...store.element.style };
   const startY = e.clientY;
   const startX = e.clientX;
   // 如果直接修改属性，值的类型会变为字符串，所以要转为数值型

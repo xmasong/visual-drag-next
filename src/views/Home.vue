@@ -75,7 +75,6 @@ function deselectCurComponent(e: MouseEvent) {
   const { isClickComponent } = storeToRefs(componentStore);
   const { hideContextMenu } = useContextMenu();
 
-  console.log("@@@isClickComponent", isClickComponent.value);
   if (!isClickComponent.value) {
     componentStore.setCurComponent({ component: null, index: null });
   }
