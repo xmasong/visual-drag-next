@@ -10,8 +10,8 @@
           <!-- <li @click="copy">复制</li>
           <li @click="paste">粘贴</li>
           <li @click="cut">剪切</li>
-          <li @click="deleteComponent">删除</li>
           <li @click="lock">锁定</li> -->
+          <li @click="handleDeleteComponent">删除</li>
           <li @click="topComponent">置顶</li>
           <li @click="bottomComponent">置底</li>
           <li @click="upComponent">上移</li>
@@ -37,6 +37,10 @@ const { topComponent, bottomComponent, upComponent, downComponent } =
 // 点击菜单时不取消当前组件的选中状态
 function handleMouseUp() {
   componentStore.setClickComponentStatus(true);
+}
+
+function handleDeleteComponent() {
+  componentStore.deleteComponent();
 }
 
 function paste() {}

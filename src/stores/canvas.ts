@@ -37,6 +37,21 @@ export const useComponent = defineStore("component", () => {
     isClickComponent.value = status;
   }
 
+  function deleteComponent(index?) {
+    if (index === undefined) {
+      index = curComponentIndex.value;
+    }
+
+    if (index === curComponentIndex.value) {
+      curComponentIndex.value = null;
+      curComponent.value = null;
+    }
+    console.log("deleteComponent", index, /\d/.test(index));
+    if (/\d/.test(index)) {
+      componentData.value.splice(index, 1);
+    }
+  }
+
   return {
     componentData,
     curComponent,
@@ -46,5 +61,6 @@ export const useComponent = defineStore("component", () => {
     setCurComponent,
     setShapeStyle,
     setClickComponentStatus,
+    deleteComponent,
   };
 });
