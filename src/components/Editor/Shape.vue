@@ -1,9 +1,16 @@
 <template>
   <div
     class="shape"
+    :class="{ active }"
     @mousedown="handleMouseDownOnShape"
-    :style="getShapeStyle(store.element.style)"
+    :style="getShapeStyle(props.element.style)"
   >
+    <div
+      v-for="item in isActive() ? pointList : []"
+      :key="item"
+      class="shape-point"
+      :style="getPointStyle(item)"
+    ></div>
     <slot></slot>
   </div>
 </template>
@@ -16,8 +23,7 @@ import { getShapeStyle } from "@/utils/style";
 const componentStore = useComponent();
 const { setCurComponent, setShapeStyle, setClickComponentStatus } =
   componentStore;
-const fresh = ref(0);
-const store = defineProps({
+const props = defineProps({
   element: {
     required: true,
     type: Object,
@@ -28,6 +34,11 @@ const store = defineProps({
     type: Number,
     default: 0,
   },
+  active: {
+    required: true,
+    type: Boolean,
+    default: false,
+  },
 });
 
 function handleMouseDownOnShape(e: MouseEvent) {
@@ -35,11 +46,11 @@ function handleMouseDownOnShape(e: MouseEvent) {
 
   setClickComponentStatus(true);
   setCurComponent({
-    component: store.element as Component,
-    index: store.index,
+    component: props.element as Component,
+    index: props.index,
   });
 
-  const pos: Pos = { ...store.element.style };
+  const pos: Pos = { ...props.element.style };
   const startY = e.clientY;
   const startX = e.clientX;
   // 如果直接修改属性，值的类型会变为字符串，所以要转为数值型
@@ -47,7 +58,6 @@ function handleMouseDownOnShape(e: MouseEvent) {
   const startLeft = Number(pos.left);
 
   const move = (moveEvent: MouseEvent) => {
-    fresh.value++;
     const currX = moveEvent.clientX;
     const currY = moveEvent.clientY;
 
@@ -65,9 +75,68 @@ function handleMouseDownOnShape(e: MouseEvent) {
   document.addEventListener("mousemove", move);
   document.addEventListener("mouseup", up);
 }
+
+// 操作锚点相关
+const pointList = ref(["lt", "t", "rt", "r", "rb", "b", "lb", "l"]);
+function isActive() {
+  return props.active && !props.element.isLock;
+}
+function getPointStyle(point) {
+  const width = props.element.style.width;
+  const height = props.element.style.height;
+  const hasT = /t/.test(point);
+  const hasB = /b/.test(point);
+  const hasL = /l/.test(point);
+  const hasR = /r/.test(point);
+  let newLeft = 0;
+  let newTop = 0;
+
+  // 四个角的点
+  if (point.length === 2) {
+    newLeft = hasL ? 0 : width;
+    newTop = hasT ? 0 : height;
+  } else {
+    // 上下两点的点，宽度居中
+    if (hasT || hasB) {
+      newLeft = width / 2;
+      newTop = hasT ? 0 : height;
+    }
+
+    // 左右两边的点，高度居中
+    if (hasL || hasR) {
+      newLeft = hasL ? 0 : width;
+      newTop = Math.floor(height / 2);
+    }
+  }
+
+  const style = {
+    marginLeft: "-4px",
+    marginTop: "-4px",
+    left: `${newLeft}px`,
+    top: `${newTop}px`,
+    // cursor: this.cursors[point],
+  };
+
+  return style;
+}
 </script>
 <style lang="scss">
 .shape {
   position: absolute;
+
+  &.active {
+    outline: 1px solid #70c0ff;
+    user-select: none;
+  }
+
+  .shape-point {
+    position: absolute;
+    background: #fff;
+    border: 1px solid #59c7f9;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    z-index: 1;
+  }
 }
 </style>

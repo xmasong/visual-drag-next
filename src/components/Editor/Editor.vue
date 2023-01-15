@@ -3,6 +3,7 @@
     <!--页面组件列表展示-->
     <Shape
       v-for="(item, index) in componentData"
+      :active="item.id === (curComponent || {}).id"
       :key="item.id"
       :element="item"
       :index="index"
@@ -24,7 +25,7 @@ import ContextMenu from "../ContextMenu.vue";
 import { storeToRefs } from "pinia";
 
 const componentStore = useComponent();
-const { componentData } = storeToRefs(componentStore);
+const { componentData, curComponent } = storeToRefs(componentStore);
 const { showContextMenu } = useContextMenu();
 
 function handleContextMenu(e) {
