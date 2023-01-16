@@ -13,6 +13,7 @@
         :is="item.component"
         :id="'component' + item.id"
         :propValue="item.propValue"
+        :element="item"
         :style="getComponentStyle(item.style)"
       />
     </Shape>

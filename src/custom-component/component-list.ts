@@ -1,5 +1,5 @@
 import type { Component } from "@/types";
-
+import airDarkUrl from "@/assets/air-dark.png";
 // 公共样式
 export const commonStyle = {
   rotate: 0,
@@ -78,15 +78,15 @@ const list: Component[] = [
     label: "图片",
     icon: "tupian",
     propValue: {
-      //   url: require("@/assets/title.jpg"),
+      url: airDarkUrl,
       flip: {
         horizontal: false,
         vertical: false,
       },
     },
     style: {
-      width: 300,
-      height: 200,
+      width: 220,
+      height: 210,
       borderRadius: "",
     },
   },

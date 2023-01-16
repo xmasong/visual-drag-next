@@ -1,6 +1,6 @@
 export interface Component {
   id?: string;
-  isLock: boolean;
+  isLock?: boolean;
   component: string;
   label: string;
   propValue: string | Record<string, any>;
