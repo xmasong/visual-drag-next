@@ -52,15 +52,22 @@ export const useComponent = defineStore("component", () => {
     }
   }
 
+  // 是否在编辑器中，用于判断复制、粘贴组件时是否生效，如果在编辑器外，则无视这些操作
+  const isInEdiotr: Ref<boolean> = ref(false);
+  function setInEditorStatus(status) {
+    isInEdiotr.value = status;
+  }
   return {
     componentData,
     curComponent,
     curComponentIndex,
     isClickComponent,
+    isInEdiotr,
     addComponent,
     setCurComponent,
     setShapeStyle,
     setClickComponentStatus,
     deleteComponent,
+    setInEditorStatus,
   };
 });

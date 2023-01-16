@@ -23,8 +23,12 @@ import { getShapeStyle, calculateComponentPositonAndSize } from "@/utils";
 import { useCompose } from "@/stores";
 
 const componentStore = useComponent();
-const { setCurComponent, setShapeStyle, setClickComponentStatus } =
-  componentStore;
+const {
+  setCurComponent,
+  setShapeStyle,
+  setClickComponentStatus,
+  setInEditorStatus,
+} = componentStore;
 const props = defineProps({
   element: {
     required: true,
@@ -135,8 +139,7 @@ function isNeedLockProportion() {
 }
 
 function handleMouseDownOnPoint(point, e) {
-  // Todo
-  // this.$store.commit("setInEditorStatus", true);
+  setInEditorStatus(true);
   setClickComponentStatus(true);
 
   e.stopPropagation();
