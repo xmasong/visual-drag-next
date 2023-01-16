@@ -31,6 +31,7 @@ export default {
   width: 100px;
   height: 34px;
   font-size: 14px;
+  padding: 0;
 
   &:active {
     color: #3a8ee6;

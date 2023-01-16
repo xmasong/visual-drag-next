@@ -30,16 +30,23 @@ import ToolBarVue from "@/views/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
 import { nanoid } from "nanoid";
-import { $ } from "@/utils/utils";
-import { useComponent, useContextMenu } from "@/stores";
+import { useComponent, useContextMenu, useCompose } from "@/stores";
 import { storeToRefs } from "pinia";
+import { onMounted } from "vue";
+
+onMounted(() => {
+  const { getEditor } = useCompose();
+  getEditor();
+});
 
 function handleDrop(e: DragEvent) {
   e.preventDefault();
   e.stopPropagation();
   let index: string = "";
   if (e.dataTransfer) index = e.dataTransfer.getData("index");
-  const rectInfo = $("#editor").getBoundingClientRect();
+
+  const { editor } = useCompose();
+  const rectInfo = editor!.getBoundingClientRect();
   if (index !== "") {
     const component = cloneDeep(componentList[+index]);
     component.style.top = e.clientY - rectInfo.y;
