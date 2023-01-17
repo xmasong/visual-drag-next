@@ -22,11 +22,12 @@
   </div>
 </template>
 <script setup lang="ts">
-import { useComponent, useContextMenu } from "@/stores/index";
+import { useComponent, useContextMenu, useCompose } from "@/stores/index";
 import Shape from "./Shape.vue";
 import ContextMenu from "../ContextMenu.vue";
 import { storeToRefs } from "pinia";
 import { getStyle } from "@/utils";
+import { onMounted } from "vue";
 
 // Shape相关
 const componentStore = useComponent();
@@ -59,6 +60,11 @@ const svgFilterAttrs = ["width", "height", "top", "left", "rotate"];
 function getComponentStyle(style) {
   return getStyle(style, svgFilterAttrs);
 }
+
+onMounted(() => {
+  const { getEditor } = useCompose();
+  getEditor();
+});
 </script>
 <style lang="scss">
 .editor {

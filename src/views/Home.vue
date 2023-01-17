@@ -32,12 +32,10 @@ import { cloneDeep } from "lodash";
 import { nanoid } from "nanoid";
 import { useComponent, useContextMenu, useCompose } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted } from "vue";
+import { listenGlobalKeyDown } from "@/utils";
 
-onMounted(() => {
-  const { getEditor } = useCompose();
-  getEditor();
-});
+// 全局监听按键事件
+listenGlobalKeyDown();
 
 function handleDrop(e: DragEvent) {
   e.preventDefault();
@@ -72,9 +70,9 @@ function handleDragOver(e: DragEvent) {
 
 function handleMouseDown(e: MouseEvent) {
   e.stopPropagation();
-  const { setClickComponentStatus } = useComponent();
+  const { setClickComponentStatus, setInEditorStatus } = useComponent();
   setClickComponentStatus(false);
-  // this.$store.commit("setInEditorStatus", true);
+  setInEditorStatus(true);
 }
 
 function deselectCurComponent(e: MouseEvent) {
