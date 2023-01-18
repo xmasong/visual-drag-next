@@ -1,4 +1,4 @@
-import { useComponent } from "@/stores";
+import { useComponent, useSnapshot } from "@/stores";
 import { storeToRefs } from "pinia";
 
 const ctrlKey = 17,
@@ -23,8 +23,8 @@ export const keycodes = [66, 67, 68, 69, 71, 76, 80, 83, 85, 86, 88, 89, 90];
 // 与组件状态无关的操作
 const basemap = {
   [vKey]: todo,
-  [yKey]: todo,
-  [zKey]: todo,
+  [yKey]: redo,
+  [zKey]: undo,
   [sKey]: todo,
   [pKey]: todo,
   [eKey]: todo,
@@ -92,6 +92,16 @@ export function listenGlobalKeyDown() {
 }
 
 function todo() {}
+
+function redo() {
+  const { redo } = useSnapshot();
+  redo();
+}
+
+function undo() {
+  const { undo } = useSnapshot();
+  undo();
+}
 
 function deleteComponent() {
   const componentStore = useComponent();
