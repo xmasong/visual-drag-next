@@ -21,6 +21,9 @@ export const useComponent = defineStore("component", () => {
     curComponentIndex.value = index;
   }
 
+  function setComponentData(compData: Component[] = []) {
+    componentData.value = compData;
+  }
   function setShapeStyle({ top, left, width, height, rotate }: Pos) {
     if (!curComponent.value) return;
     if (top) curComponent.value.style.top = Math.round(top);
@@ -65,6 +68,7 @@ export const useComponent = defineStore("component", () => {
     isInEdiotr,
     addComponent,
     setCurComponent,
+    setComponentData,
     setShapeStyle,
     setClickComponentStatus,
     deleteComponent,
