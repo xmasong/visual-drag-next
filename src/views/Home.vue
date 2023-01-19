@@ -30,7 +30,12 @@ import ToolBarVue from "@/views/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
 import { nanoid } from "nanoid";
-import { useComponent, useContextMenu, useCompose } from "@/stores";
+import {
+  useComponent,
+  useContextMenu,
+  useCompose,
+  useSnapshot,
+} from "@/stores";
 import { storeToRefs } from "pinia";
 import { listenGlobalKeyDown } from "@/utils";
 
@@ -57,8 +62,8 @@ function handleDrop(e: DragEvent) {
     componentStore.addComponent({ component });
 
     console.log("@@@Drop: ", component.style.top, component.style.left);
-
-    // this.$store.commit("recordSnapshot");
+    const { recordSnapshot } = useSnapshot();
+    recordSnapshot();
   }
 }
 
