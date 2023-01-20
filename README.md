@@ -2,7 +2,7 @@
 
 A visual drag project based on vue3+pinia+vite.
 
-Learning from [woai3c/visual-drag-demo](https://github.com/woai3c/visual-drag-demo)
+> This project is based on [woai3c/visual-drag-demo](https://github.com/woai3c/visual-drag-demo) which use vue2+vuex+webpack.
 ## Project Setup
 
 ```sh
