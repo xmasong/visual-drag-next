@@ -54,13 +54,15 @@ export function listenGlobalKeyDown() {
   window.onkeydown = (e) => {
     const componentStore = useComponent();
     const { isInEdiotr, curComponent } = storeToRefs(componentStore);
+    const { recordSnapshot } = useSnapshot();
+
     if (!isInEdiotr.value) return;
     const { keyCode } = e;
     if (keyCode === ctrlKey || keyCode === commandKey) {
       isCtrlOrCommandDown = true;
     } else if (keyCode == deleteKey && curComponent.value) {
       componentStore.deleteComponent();
-      //   store.commit("recordSnapshot");
+      recordSnapshot();
     } else if (isCtrlOrCommandDown) {
       if (
         unlockMap[keyCode] &&
@@ -107,8 +109,10 @@ function deleteComponent() {
   const componentStore = useComponent();
   const { curComponent } = storeToRefs(componentStore);
   const { deleteComponent } = componentStore;
+  const { recordSnapshot } = useSnapshot();
+
   if (curComponent.value) {
     deleteComponent();
-    // store.commit("recordSnapshot");
+    recordSnapshot();
   }
 }

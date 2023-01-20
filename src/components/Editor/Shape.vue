@@ -20,7 +20,7 @@ import { useComponent } from "@/stores/canvas";
 import type { Pos, Component } from "@/types";
 import { ref } from "vue";
 import { getShapeStyle, calculateComponentPositonAndSize } from "@/utils";
-import { useCompose } from "@/stores";
+import { useCompose, useSnapshot } from "@/stores";
 
 const componentStore = useComponent();
 const {
@@ -29,6 +29,8 @@ const {
   setClickComponentStatus,
   setInEditorStatus,
 } = componentStore;
+
+const { recordSnapshot } = useSnapshot();
 const props = defineProps({
   element: {
     required: true,
@@ -64,7 +66,10 @@ function handleMouseDownOnShape(e: MouseEvent) {
   const startTop = Number(pos.top);
   const startLeft = Number(pos.left);
 
+  // 如果元素没有移动，则不保存快照
+  let hasMove = false;
   const move = (moveEvent: MouseEvent) => {
+    hasMove = true;
     const currX = moveEvent.clientX;
     const currY = moveEvent.clientY;
 
@@ -75,6 +80,7 @@ function handleMouseDownOnShape(e: MouseEvent) {
   };
 
   const up = () => {
+    hasMove && recordSnapshot();
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", up);
   };
@@ -217,7 +223,7 @@ function handleMouseDownOnPoint(point, e) {
   const up = () => {
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", up);
-    // needSave && this.$store.commit("recordSnapshot");
+    needSave && recordSnapshot();
   };
 
   document.addEventListener("mousemove", move);

@@ -27,7 +27,7 @@ export const useSnapshot = defineStore("snapshot", () => {
       const componentData = cloneDeep(snapshotData.value[snapshotIndex.value]); // || getDefaultcomponentData();
       if (componentStore.curComponent) {
         // 如果当前组件不在 componentData 中，则置空
-        const needClean = !componentData.find(
+        const needClean = !componentData?.find(
           (component) => componentStore?.curComponent?.id === component.id
         );
 
