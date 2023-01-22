@@ -12,6 +12,8 @@
 </template>
 
 <script setup lang="ts">
+import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
 import { reactive, ref } from "vue";
 
 // 分别对应三条横线和三条竖线
@@ -26,6 +28,15 @@ const lineStatus = reactive({
   yc: false,
   yr: false,
 });
+
+const componentStore = useComponent();
+const { componentData, curComponent } = storeToRefs(componentStore);
+
+function hideLine() {
+  Object.keys(lineStatus).forEach((line) => {
+    lineStatus[line] = false;
+  });
+}
 </script>
 
 <style lang="scss" scoped>
