@@ -1,10 +1,10 @@
 <template>
   <div class="mark-line">
     <div
-      v-for="line in lines"
+      v-for="line in lineList"
       v-show="lineStatus[line] || false"
       :key="line"
-      :ref="line"
+      :ref="lines"
       class="line"
       :class="line.includes('x') ? 'xline' : 'yline'"
     ></div>
@@ -17,7 +17,7 @@ import { storeToRefs } from "pinia";
 import { reactive, ref } from "vue";
 
 // 分别对应三条横线和三条竖线
-const lines = ref(["xt", "xc", "xb", "yl", "yc", "yr"]);
+const lineList = ref(["xt", "xc", "xb", "yl", "yc", "yr"]);
 // 相距 dff 像素将自动吸附
 const diff = ref(3);
 const lineStatus = reactive({
@@ -28,13 +28,144 @@ const lineStatus = reactive({
   yc: false,
   yr: false,
 });
-
+const lines = ref();
 const componentStore = useComponent();
 const { componentData, curComponent } = storeToRefs(componentStore);
 
 function hideLine() {
   Object.keys(lineStatus).forEach((line) => {
     lineStatus[line] = false;
+  });
+}
+
+function showLine(isDownward, isRightward) {
+  const components = this.componentData;
+  const curComponentStyle = getComponentRotatedStyle(this.curComponent.style);
+  const curComponentHalfwidth = curComponentStyle.width / 2;
+  const curComponentHalfHeight = curComponentStyle.height / 2;
+
+  this.hideLine();
+  components.forEach((component) => {
+    if (component == this.curComponent) return;
+    const componentStyle = getComponentRotatedStyle(component.style);
+    const { top, left, bottom, right } = componentStyle;
+    const componentHalfwidth = componentStyle.width / 2;
+    const componentHalfHeight = componentStyle.height / 2;
+
+    const conditions = {
+      top: [
+        {
+          isNearly: this.isNearly(curComponentStyle.top, top),
+          lineNode: lines.value.xt[0], // xt
+          line: "xt",
+          dragShift: top,
+          lineShift: top,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.bottom, top),
+          lineNode: lines.value.xt[0], // xt
+          line: "xt",
+          dragShift: top - curComponentStyle.height,
+          lineShift: top,
+        },
+        {
+          // 组件与拖拽节点的中间是否对齐
+          isNearly: this.isNearly(
+            curComponentStyle.top + curComponentHalfHeight,
+            top + componentHalfHeight
+          ),
+          lineNode: lines.value.xc[0], // xc
+          line: "xc",
+          dragShift: top + componentHalfHeight - curComponentHalfHeight,
+          lineShift: top + componentHalfHeight,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.top, bottom),
+          lineNode: lines.value.xb[0], // xb
+          line: "xb",
+          dragShift: bottom,
+          lineShift: bottom,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.bottom, bottom),
+          lineNode: lines.value.xb[0], // xb
+          line: "xb",
+          dragShift: bottom - curComponentStyle.height,
+          lineShift: bottom,
+        },
+      ],
+      left: [
+        {
+          isNearly: this.isNearly(curComponentStyle.left, left),
+          lineNode: lines.value.yl[0], // yl
+          line: "yl",
+          dragShift: left,
+          lineShift: left,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.right, left),
+          lineNode: lines.value.yl[0], // yl
+          line: "yl",
+          dragShift: left - curComponentStyle.width,
+          lineShift: left,
+        },
+        {
+          // 组件与拖拽节点的中间是否对齐
+          isNearly: this.isNearly(
+            curComponentStyle.left + curComponentHalfwidth,
+            left + componentHalfwidth
+          ),
+          lineNode: lines.value.yc[0], // yc
+          line: "yc",
+          dragShift: left + componentHalfwidth - curComponentHalfwidth,
+          lineShift: left + componentHalfwidth,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.left, right),
+          lineNode: lines.value.yr[0], // yr
+          line: "yr",
+          dragShift: right,
+          lineShift: right,
+        },
+        {
+          isNearly: this.isNearly(curComponentStyle.right, right),
+          lineNode: lines.value.yr[0], // yr
+          line: "yr",
+          dragShift: right - curComponentStyle.width,
+          lineShift: right,
+        },
+      ],
+    };
+
+    const needToShow = [];
+    const { rotate } = this.curComponent.style;
+    Object.keys(conditions).forEach((key) => {
+      // 遍历符合的条件并处理
+      conditions[key].forEach((condition) => {
+        if (!condition.isNearly) return;
+        // 修改当前组件位移
+        this.$store.commit("setShapeSingleStyle", {
+          key,
+          value:
+            rotate != 0
+              ? this.translatecurComponentShift(
+                  key,
+                  condition,
+                  curComponentStyle
+                )
+              : condition.dragShift,
+        });
+
+        condition.lineNode.style[key] = `${condition.lineShift}px`;
+        needToShow.push(condition.line);
+      });
+    });
+
+    // 同一方向上同时显示三条线可能不太美观，因此才有了这个解决方案
+    // 同一方向上的线只显示一条，例如多条横条只显示一条横线
+    if (needToShow.length) {
+      this.chooseTheTureLine(needToShow, isDownward, isRightward);
+    }
   });
 }
 </script>
