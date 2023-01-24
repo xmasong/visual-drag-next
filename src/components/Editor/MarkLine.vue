@@ -39,14 +39,13 @@ function hideLine() {
 }
 
 function showLine(isDownward, isRightward) {
-  const components = this.componentData;
-  const curComponentStyle = getComponentRotatedStyle(this.curComponent.style);
+  const curComponentStyle = getComponentRotatedStyle(curComponent.value?.style);
   const curComponentHalfwidth = curComponentStyle.width / 2;
   const curComponentHalfHeight = curComponentStyle.height / 2;
 
-  this.hideLine();
-  components.forEach((component) => {
-    if (component == this.curComponent) return;
+  hideLine();
+  componentData.value.forEach((component) => {
+    if (component == curComponent.value) return;
     const componentStyle = getComponentRotatedStyle(component.style);
     const { top, left, bottom, right } = componentStyle;
     const componentHalfwidth = componentStyle.width / 2;
@@ -138,7 +137,7 @@ function showLine(isDownward, isRightward) {
     };
 
     const needToShow = [];
-    const { rotate } = this.curComponent.style;
+    const { rotate } = curComponent.value!.style;
     Object.keys(conditions).forEach((key) => {
       // 遍历符合的条件并处理
       conditions[key].forEach((condition) => {
