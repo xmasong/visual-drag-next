@@ -13,6 +13,7 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
+import { getComponentRotatedStyle } from "@/utils";
 import { storeToRefs } from "pinia";
 import { reactive, ref } from "vue";
 
