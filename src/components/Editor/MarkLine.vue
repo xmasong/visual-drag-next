@@ -32,7 +32,7 @@ const lineStatus = reactive({
 const lines = ref();
 const componentStore = useComponent();
 const { componentData, curComponent } = storeToRefs(componentStore);
-
+const { setShapeSingleStyle } = componentStore;
 function hideLine() {
   Object.keys(lineStatus).forEach((line) => {
     lineStatus[line] = false;
@@ -148,7 +148,7 @@ function showLine(isDownward, isRightward) {
       conditions[key].forEach((condition) => {
         if (!condition.isNearly) return;
         // 修改当前组件位移
-        this.$store.commit("setShapeSingleStyle", {
+        setShapeSingleStyle({
           key,
           value:
             rotate != 0

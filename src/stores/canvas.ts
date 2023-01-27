@@ -33,7 +33,8 @@ export const useComponent = defineStore("component", () => {
     if (rotate) curComponent.value.style.rotate = Math.round(rotate);
   }
 
-  function setShapeSingleStyle({ curComponent }, { key, value }) {
+  function setShapeSingleStyle({ key, value }) {
+    if (!curComponent.value) return;
     curComponent.value.style[key] = value;
   }
 
