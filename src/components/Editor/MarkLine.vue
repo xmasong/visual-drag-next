@@ -39,6 +39,10 @@ function hideLine() {
   });
 }
 
+function isNearly(dragValue, targetValue) {
+  return Math.abs(dragValue - targetValue) <= diff.value;
+}
+
 function showLine(isDownward, isRightward) {
   const curComponentStyle = getComponentRotatedStyle(curComponent.value?.style);
   const curComponentHalfwidth = curComponentStyle.width / 2;
@@ -55,14 +59,14 @@ function showLine(isDownward, isRightward) {
     const conditions = {
       top: [
         {
-          isNearly: this.isNearly(curComponentStyle.top, top),
+          isNearly: isNearly(curComponentStyle.top, top),
           lineNode: lines.value.xt[0], // xt
           line: "xt",
           dragShift: top,
           lineShift: top,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.bottom, top),
+          isNearly: isNearly(curComponentStyle.bottom, top),
           lineNode: lines.value.xt[0], // xt
           line: "xt",
           dragShift: top - curComponentStyle.height,
@@ -70,7 +74,7 @@ function showLine(isDownward, isRightward) {
         },
         {
           // 组件与拖拽节点的中间是否对齐
-          isNearly: this.isNearly(
+          isNearly: isNearly(
             curComponentStyle.top + curComponentHalfHeight,
             top + componentHalfHeight
           ),
@@ -80,14 +84,14 @@ function showLine(isDownward, isRightward) {
           lineShift: top + componentHalfHeight,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.top, bottom),
+          isNearly: isNearly(curComponentStyle.top, bottom),
           lineNode: lines.value.xb[0], // xb
           line: "xb",
           dragShift: bottom,
           lineShift: bottom,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.bottom, bottom),
+          isNearly: isNearly(curComponentStyle.bottom, bottom),
           lineNode: lines.value.xb[0], // xb
           line: "xb",
           dragShift: bottom - curComponentStyle.height,
@@ -96,14 +100,14 @@ function showLine(isDownward, isRightward) {
       ],
       left: [
         {
-          isNearly: this.isNearly(curComponentStyle.left, left),
+          isNearly: isNearly(curComponentStyle.left, left),
           lineNode: lines.value.yl[0], // yl
           line: "yl",
           dragShift: left,
           lineShift: left,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.right, left),
+          isNearly: isNearly(curComponentStyle.right, left),
           lineNode: lines.value.yl[0], // yl
           line: "yl",
           dragShift: left - curComponentStyle.width,
@@ -111,7 +115,7 @@ function showLine(isDownward, isRightward) {
         },
         {
           // 组件与拖拽节点的中间是否对齐
-          isNearly: this.isNearly(
+          isNearly: isNearly(
             curComponentStyle.left + curComponentHalfwidth,
             left + componentHalfwidth
           ),
@@ -121,14 +125,14 @@ function showLine(isDownward, isRightward) {
           lineShift: left + componentHalfwidth,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.left, right),
+          isNearly: isNearly(curComponentStyle.left, right),
           lineNode: lines.value.yr[0], // yr
           line: "yr",
           dragShift: right,
           lineShift: right,
         },
         {
-          isNearly: this.isNearly(curComponentStyle.right, right),
+          isNearly: isNearly(curComponentStyle.right, right),
           lineNode: lines.value.yr[0], // yr
           line: "yr",
           dragShift: right - curComponentStyle.width,

@@ -33,6 +33,10 @@ export const useComponent = defineStore("component", () => {
     if (rotate) curComponent.value.style.rotate = Math.round(rotate);
   }
 
+  function setShapeSingleStyle({ curComponent }, { key, value }) {
+    curComponent.value.style[key] = value;
+  }
+
   // 点击画布时是否点中组件，主要用于取消选中组件用。
   // 如果没点中组件，并且在画布空白处弹起鼠标，则取消当前组件的选中状态
   const isClickComponent = ref(false);
@@ -70,6 +74,7 @@ export const useComponent = defineStore("component", () => {
     setCurComponent,
     setComponentData,
     setShapeStyle,
+    setShapeSingleStyle,
     setClickComponentStatus,
     deleteComponent,
     setInEditorStatus,
