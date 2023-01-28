@@ -43,6 +43,19 @@ function isNearly(dragValue, targetValue) {
   return Math.abs(dragValue - targetValue) <= diff.value;
 }
 
+function translateCurComponentShift(key, condition, curComponentStyle) {
+  const { width, height } = curComponent.value!.style;
+  if (key == "top") {
+    return Math.round(
+      condition.dragShift - (height - curComponentStyle.height) / 2
+    );
+  }
+
+  return Math.round(
+    condition.dragShift - (width - curComponentStyle.width) / 2
+  );
+}
+
 function showLine(isDownward, isRightward) {
   const curComponentStyle = getComponentRotatedStyle(curComponent.value?.style);
   const curComponentHalfwidth = curComponentStyle.width / 2;
@@ -141,7 +154,7 @@ function showLine(isDownward, isRightward) {
       ],
     };
 
-    const needToShow = [];
+    const needToShow: any[] = [];
     const { rotate } = curComponent.value!.style;
     Object.keys(conditions).forEach((key) => {
       // 遍历符合的条件并处理
@@ -152,11 +165,7 @@ function showLine(isDownward, isRightward) {
           key,
           value:
             rotate != 0
-              ? this.translatecurComponentShift(
-                  key,
-                  condition,
-                  curComponentStyle
-                )
+              ? translateCurComponentShift(key, condition, curComponentStyle)
               : condition.dragShift,
         });
 
