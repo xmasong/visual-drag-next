@@ -56,6 +56,46 @@ function translateCurComponentShift(key, condition, curComponentStyle) {
   );
 }
 
+function chooseTheTureLine(needToShow, isDownward, isRightward) {
+  // 如果鼠标向右移动 则按从右到左的顺序显示竖线 否则按相反顺序显示
+  // 如果鼠标向下移动 则按从下到上的顺序显示横线 否则按相反顺序显示
+  if (isRightward) {
+    if (needToShow.includes("yr")) {
+      lineStatus.yr = true;
+    } else if (needToShow.includes("yc")) {
+      lineStatus.yc = true;
+    } else if (needToShow.includes("yl")) {
+      lineStatus.yl = true;
+    }
+  } else {
+    if (needToShow.includes("yl")) {
+      lineStatus.yl = true;
+    } else if (needToShow.includes("yc")) {
+      lineStatus.yc = true;
+    } else if (needToShow.includes("yr")) {
+      lineStatus.yr = true;
+    }
+  }
+
+  if (isDownward) {
+    if (needToShow.includes("xb")) {
+      lineStatus.xb = true;
+    } else if (needToShow.includes("xc")) {
+      lineStatus.xc = true;
+    } else if (needToShow.includes("xt")) {
+      lineStatus.xt = true;
+    }
+  } else {
+    if (needToShow.includes("xt")) {
+      lineStatus.xt = true;
+    } else if (needToShow.includes("xc")) {
+      lineStatus.xc = true;
+    } else if (needToShow.includes("xb")) {
+      lineStatus.xb = true;
+    }
+  }
+}
+
 function showLine(isDownward, isRightward) {
   const curComponentStyle = getComponentRotatedStyle(curComponent.value?.style);
   const curComponentHalfwidth = curComponentStyle.width / 2;
@@ -177,7 +217,7 @@ function showLine(isDownward, isRightward) {
     // 同一方向上同时显示三条线可能不太美观，因此才有了这个解决方案
     // 同一方向上的线只显示一条，例如多条横条只显示一条横线
     if (needToShow.length) {
-      this.chooseTheTureLine(needToShow, isDownward, isRightward);
+      chooseTheTureLine(needToShow, isDownward, isRightward);
     }
   });
 }
