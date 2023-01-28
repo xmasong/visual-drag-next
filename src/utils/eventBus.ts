@@ -1,5 +1,7 @@
 // 用于监听、触发事件
 import mitt from "mitt";
 
-const emitter = mitt();
-export default emitter;
+type Events = {
+  [propName: string]: any;
+};
+export const eventBus = mitt<Events>();

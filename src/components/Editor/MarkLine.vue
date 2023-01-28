@@ -13,9 +13,9 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
-import { getComponentRotatedStyle } from "@/utils";
+import { eventBus, getComponentRotatedStyle } from "@/utils";
 import { storeToRefs } from "pinia";
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
 
 // 分别对应三条横线和三条竖线
 const lineList = ref(["xt", "xc", "xb", "yl", "yc", "yr"]);
@@ -221,6 +221,17 @@ function showLine(isDownward, isRightward) {
     }
   });
 }
+
+onMounted(() => {
+  // 监听元素移动和不移动的事件
+  eventBus.on("move", ({ isDownward, isRightward }) => {
+    showLine(isDownward, isRightward);
+  });
+
+  eventBus.on("unmove", () => {
+    hideLine();
+  });
+});
 </script>
 
 <style lang="scss" scoped>
