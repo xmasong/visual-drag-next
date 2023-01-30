@@ -18,8 +18,12 @@
 <script setup lang="ts">
 import { useComponent } from "@/stores/canvas";
 import type { Pos, Component } from "@/types";
-import { ref } from "vue";
-import { getShapeStyle, calculateComponentPositonAndSize } from "@/utils";
+import { ref, nextTick } from "vue";
+import {
+  getShapeStyle,
+  calculateComponentPositonAndSize,
+  eventBus,
+} from "@/utils";
 import { useCompose, useSnapshot } from "@/stores";
 
 const componentStore = useComponent();
@@ -70,13 +74,25 @@ function handleMouseDownOnShape(e: MouseEvent) {
   let hasMove = false;
   const move = (moveEvent: MouseEvent) => {
     hasMove = true;
-    const currX = moveEvent.clientX;
-    const currY = moveEvent.clientY;
+    const curX = moveEvent.clientX;
+    const curY = moveEvent.clientY;
 
-    pos.top = currY - startY + startTop;
-    pos.left = currX - startX + startLeft;
+    pos.top = curY - startY + startTop;
+    pos.left = curX - startX + startLeft;
     // 修改当前组件样式
     setShapeStyle(pos);
+    // 等更新完当前组件的样式并绘制到屏幕后再判断是否需要吸附
+    // 如果不使用 nextTick，吸附后将无法移动
+    nextTick(() => {
+      // 触发元素移动事件，用于显示标线、吸附功能
+      // 后面两个参数代表鼠标移动方向
+      // curY - startY > 0 true 表示向下移动 false 表示向上移动
+      // curX - startX > 0 true 表示向右移动 false 表示向左移动
+      eventBus.emit("move", {
+        isDownward: curY - startY > 0,
+        isRightward: curX - startX > 0,
+      });
+    });
   };
 
   const up = () => {
