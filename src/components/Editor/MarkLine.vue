@@ -4,7 +4,7 @@
       v-for="line in lineList"
       v-show="lineStatus[line] || false"
       :key="line"
-      :ref="lines"
+      ref="lineRef"
       class="line"
       :class="line.includes('x') ? 'xline' : 'yline'"
     ></div>
@@ -29,7 +29,7 @@ const lineStatus = reactive({
   yc: false,
   yr: false,
 });
-const lines = ref();
+const lineRef = ref();
 const componentStore = useComponent();
 const { componentData, curComponent } = storeToRefs(componentStore);
 const { setShapeSingleStyle } = componentStore;
@@ -43,6 +43,7 @@ function isNearly(dragValue, targetValue) {
   return Math.abs(dragValue - targetValue) <= diff.value;
 }
 
+// Todo: 旋转吸附
 function translateCurComponentShift(key, condition, curComponentStyle) {
   const { width, height } = curComponent.value!.style;
   if (key == "top") {
@@ -109,18 +110,19 @@ function showLine(isDownward, isRightward) {
     const componentHalfwidth = componentStyle.width / 2;
     const componentHalfHeight = componentStyle.height / 2;
 
+    // dragShift-发生吸附后当前组件的top/left值，lineShift-发生吸附后辅助线的top/left值。
     const conditions = {
       top: [
         {
           isNearly: isNearly(curComponentStyle.top, top),
-          lineNode: lines.value.xt[0], // xt
+          lineNode: lineRef.value[0], // xt
           line: "xt",
           dragShift: top,
           lineShift: top,
         },
         {
           isNearly: isNearly(curComponentStyle.bottom, top),
-          lineNode: lines.value.xt[0], // xt
+          lineNode: lineRef.value[0], // xt
           line: "xt",
           dragShift: top - curComponentStyle.height,
           lineShift: top,
@@ -131,21 +133,21 @@ function showLine(isDownward, isRightward) {
             curComponentStyle.top + curComponentHalfHeight,
             top + componentHalfHeight
           ),
-          lineNode: lines.value.xc[0], // xc
+          lineNode: lineRef.value[1], // xc
           line: "xc",
           dragShift: top + componentHalfHeight - curComponentHalfHeight,
           lineShift: top + componentHalfHeight,
         },
         {
           isNearly: isNearly(curComponentStyle.top, bottom),
-          lineNode: lines.value.xb[0], // xb
+          lineNode: lineRef.value[2], // xb
           line: "xb",
           dragShift: bottom,
           lineShift: bottom,
         },
         {
           isNearly: isNearly(curComponentStyle.bottom, bottom),
-          lineNode: lines.value.xb[0], // xb
+          lineNode: lineRef.value[2], // xb
           line: "xb",
           dragShift: bottom - curComponentStyle.height,
           lineShift: bottom,
@@ -154,14 +156,14 @@ function showLine(isDownward, isRightward) {
       left: [
         {
           isNearly: isNearly(curComponentStyle.left, left),
-          lineNode: lines.value.yl[0], // yl
+          lineNode: lineRef.value[3], // yl
           line: "yl",
           dragShift: left,
           lineShift: left,
         },
         {
           isNearly: isNearly(curComponentStyle.right, left),
-          lineNode: lines.value.yl[0], // yl
+          lineNode: lineRef.value[3], // yl
           line: "yl",
           dragShift: left - curComponentStyle.width,
           lineShift: left,
@@ -172,21 +174,21 @@ function showLine(isDownward, isRightward) {
             curComponentStyle.left + curComponentHalfwidth,
             left + componentHalfwidth
           ),
-          lineNode: lines.value.yc[0], // yc
+          lineNode: lineRef.value[4], // yc
           line: "yc",
           dragShift: left + componentHalfwidth - curComponentHalfwidth,
           lineShift: left + componentHalfwidth,
         },
         {
           isNearly: isNearly(curComponentStyle.left, right),
-          lineNode: lines.value.yr[0], // yr
+          lineNode: lineRef.value[5], // yr
           line: "yr",
           dragShift: right,
           lineShift: right,
         },
         {
           isNearly: isNearly(curComponentStyle.right, right),
-          lineNode: lines.value.yr[0], // yr
+          lineNode: lineRef.value[5], // yr
           line: "yr",
           dragShift: right - curComponentStyle.width,
           lineShift: right,
@@ -231,6 +233,7 @@ onMounted(() => {
   eventBus.on("unmove", () => {
     hideLine();
   });
+  console.log("@@@ref", lineRef.value);
 });
 </script>
 

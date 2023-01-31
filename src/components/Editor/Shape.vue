@@ -97,6 +97,8 @@ function handleMouseDownOnShape(e: MouseEvent) {
 
   const up = () => {
     hasMove && recordSnapshot();
+    // 触发元素停止移动事件，用于隐藏标线
+    eventBus.emit("unmove");
     document.removeEventListener("mousemove", move);
     document.removeEventListener("mouseup", up);
   };

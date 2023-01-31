@@ -17,6 +17,8 @@
         :style="getComponentStyle(item.style)"
       />
     </Shape>
+    <!-- 标线 -->
+    <MarkLine />
     <!-- 右击菜单 -->
     <ContextMenu />
   </div>
@@ -24,11 +26,11 @@
 <script setup lang="ts">
 import { useComponent, useContextMenu, useCompose } from "@/stores/index";
 import Shape from "./Shape.vue";
+import MarkLine from "./MarkLine.vue";
 import ContextMenu from "../ContextMenu.vue";
 import { storeToRefs } from "pinia";
 import { getStyle } from "@/utils";
 import { onMounted } from "vue";
-
 // Shape相关
 const componentStore = useComponent();
 const { componentData, curComponent } = storeToRefs(componentStore);
