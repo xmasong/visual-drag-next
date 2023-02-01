@@ -18,11 +18,13 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 
 const activeName = ref("");
 const styleKeys = ref([]);
-const { curComponent } = useComponent();
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
 function onChange() {}
 </script>
 
