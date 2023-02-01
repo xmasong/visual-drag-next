@@ -8,7 +8,11 @@
             :key="index"
             :label="label"
           >
-            <el-input v-model.number="curComponent.style[key]" type="number" />
+            <el-input
+              v-if="curComponent"
+              v-model.number="curComponent.style[key]"
+              type="number"
+            />
           </el-form-item>
         </el-form>
       </el-collapse-item>
