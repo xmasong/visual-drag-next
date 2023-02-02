@@ -22,14 +22,23 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
+import { styleData } from "@/utils";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const activeName = ref("");
-const styleKeys = ref([]);
 const componentStore = useComponent();
 const { curComponent } = storeToRefs(componentStore);
-function onChange() {}
+
+const styleKeys = computed(() => {
+  if (!curComponent.value) return [];
+  const curComponentStyleKeys = Object.keys(curComponent.value.style);
+  return styleData.filter((item) => curComponentStyleKeys.includes(item.key));
+});
+
+function onChange() {
+  curComponent.value!.collapseName = activeName.value;
+}
 </script>
 
 <style lang="scss">

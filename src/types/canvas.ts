@@ -7,6 +7,8 @@ export interface Component {
   icon: string;
   request?: Record<string, any>;
   style: Record<string, any>;
+  // common attr
+  collapseName?: string;
 }
 
 export interface ComponentParams {
