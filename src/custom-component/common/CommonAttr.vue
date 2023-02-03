@@ -26,7 +26,7 @@ import { styleData } from "@/utils";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
 
-const activeName = ref("");
+const activeName = ref("style");
 const componentStore = useComponent();
 const { curComponent } = storeToRefs(componentStore);
 
