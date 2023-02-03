@@ -19,7 +19,19 @@
         </div>
       </section>
       <!-- 右侧属性列表 -->
-      <section class="right"></section>
+      <section class="right">
+        <el-tabs v-if="curComponent" v-model="activeName">
+          <el-tab-pane label="属性" name="attr">
+            <component :is="curComponent.component + 'Attr'" />
+          </el-tab-pane>
+          <el-tab-pane label="动画" name="animation" style="padding-top: 20px">
+            <!-- <AnimationList /> -->
+          </el-tab-pane>
+          <el-tab-pane label="事件" name="events" style="padding-top: 20px">
+            <!-- <EventList /> -->
+          </el-tab-pane>
+        </el-tabs>
+      </section>
     </main>
   </div>
 </template>
@@ -38,6 +50,12 @@ import {
 } from "@/stores";
 import { storeToRefs } from "pinia";
 import { listenGlobalKeyDown } from "@/utils";
+import { ref } from "vue";
+
+// 右侧画布
+const activeName = ref("attr");
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
 
 // 全局监听按键事件
 listenGlobalKeyDown();
@@ -98,6 +116,7 @@ function deselectCurComponent(e: MouseEvent) {
 .home {
   height: 100vh;
   background: #fff;
+
   .tool-bar {
     padding: 15px 10px;
     white-space: nowrap;
@@ -133,6 +152,45 @@ function deselectCurComponent(e: MouseEvent) {
       top: 0;
       .el-select {
         width: 100%;
+      }
+      // 右侧attr编辑列表样式
+      .attr-list {
+        overflow: auto;
+        padding: 10px 14px;
+        padding-top: 0;
+        height: 100%;
+      }
+      .el-collapse-item__content {
+        padding-bottom: 0;
+      }
+
+      .v-common-attr {
+        margin-bottom: 18px;
+
+        .el-form {
+          padding: 10px;
+          padding-top: 0;
+        }
+      }
+      .el-tabs {
+        height: 100%;
+      }
+
+      .el-tabs__content {
+        height: calc(100% - 55px);
+        overflow: auto;
+      }
+
+      .el-tabs__nav-scroll {
+        padding-left: 20px;
+      }
+
+      .el-tabs__header {
+        margin: 0;
+      }
+
+      .el-tag {
+        text-align: right;
       }
     }
 
