@@ -26,4 +26,8 @@ components.forEach((key) => {
       () => import(`@/custom-component/${key}/Component.vue`)
     )
   );
+  app.component(
+    key + "Attr",
+    defineAsyncComponent(() => import(`@/custom-component/${key}/Attr.vue`))
+  );
 });
