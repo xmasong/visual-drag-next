@@ -2,14 +2,19 @@
   <div class="v-common-attr">
     <el-collapse v-model="activeName" accordion @change="onChange">
       <el-collapse-item title="通用样式" name="style">
-        <el-form>
+        <el-form v-if="curComponent">
           <el-form-item
             v-for="({ key, label }, index) in styleKeys"
             :key="index"
             :label="label"
           >
+            <el-color-picker
+              v-if="isIncludesColor(key)"
+              v-model="curComponent.style[key]"
+              show-alpha
+            ></el-color-picker>
             <el-input
-              v-if="curComponent"
+              v-else
               v-model.number="curComponent.style[key]"
               type="number"
             />
@@ -38,6 +43,10 @@ const styleKeys = computed(() => {
 
 function onChange() {
   curComponent.value!.collapseName = activeName.value;
+}
+
+function isIncludesColor(str) {
+  return str.toLowerCase().includes("color");
 }
 </script>
 
