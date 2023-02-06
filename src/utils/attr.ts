@@ -18,3 +18,49 @@ export const styleData = [
   { key: "verticalAlign", label: "上下对齐" },
   { key: "opacity", label: "不透明度" },
 ];
+export const selectKey = ["textAlign", "borderStyle", "verticalAlign"];
+export const textAlignOptions = [
+  {
+    label: "左对齐",
+    value: "left",
+  },
+  {
+    label: "居中",
+    value: "center",
+  },
+  {
+    label: "右对齐",
+    value: "right",
+  },
+];
+
+export const borderStyleOptions = [
+  {
+    label: "实线",
+    value: "solid",
+  },
+  {
+    label: "虚线",
+    value: "dashed",
+  },
+];
+
+export const verticalAlignOptions = [
+  {
+    label: "上对齐",
+    value: "top",
+  },
+  {
+    label: "居中对齐",
+    value: "middle",
+  },
+  {
+    label: "下对齐",
+    value: "bottom",
+  },
+];
+export const optionMap = {
+  textAlign: textAlignOptions,
+  borderStyle: borderStyleOptions,
+  verticalAlign: verticalAlignOptions,
+};

@@ -13,6 +13,17 @@
               v-model="curComponent.style[key]"
               show-alpha
             ></el-color-picker>
+            <el-select
+              v-else-if="selectKey.includes(key)"
+              v-model="curComponent.style[key]"
+            >
+              <el-option
+                v-for="item in optionMap[key]"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              ></el-option>
+            </el-select>
             <el-input
               v-else
               v-model.number="curComponent.style[key]"
@@ -27,7 +38,7 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
-import { styleData } from "@/utils";
+import { styleData, selectKey, optionMap } from "@/utils";
 import { storeToRefs } from "pinia";
 import { ref, computed } from "vue";
 
