@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <ToolBarVue />
+    <ToolBar />
     <main>
       <!-- 左侧组件列表 -->
       <section class="left">
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import ComponentList from "@/components/ComponentList.vue";
 import Editor from "@/components/Editor/Editor.vue";
-import ToolBarVue from "@/views/ToolBar.vue";
+import ToolBar from "@/components/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
 import { nanoid } from "nanoid";
