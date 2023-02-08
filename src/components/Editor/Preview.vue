@@ -1,9 +1,9 @@
 <template>
   <div ref="container" class="bg">
-    <el-button v-if="!isScreenshot" class="close" @click="close"
+    <el-button v-if="!isScreenshot" class="close" @click="$emit('close')"
       >关闭</el-button
     >
-    <el-button v-else class="close" @click="htmlToImage">确定</el-button>
+    <!-- <el-button v-else class="close" @click="htmlToImage">确定</el-button>
     <div class="canvas-container">
       <div
         class="canvas"
@@ -19,59 +19,17 @@
           :config="item"
         />
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
-<script>
-import { getStyle, getCanvasStyle } from "@/utils/style";
-import { mapState } from "vuex";
-import ComponentWrapper from "./ComponentWrapper";
-import { changeStyleWithScale } from "@/utils/translate";
-import { toPng } from "html-to-image";
-import { deepCopy } from "@/utils/utils";
-
-export default {
-  components: { ComponentWrapper },
-  props: {
-    isScreenshot: {
-      type: Boolean,
-      default: false,
-    },
+<script setup lang="ts">
+const props = defineProps({
+  isScreenshot: {
+    type: Boolean,
+    default: false,
   },
-  data() {
-    return {
-      copyData: [],
-    };
-  },
-  computed: mapState(["componentData", "canvasStyleData"]),
-  created() {
-    this.$set(this, "copyData", deepCopy(this.componentData));
-  },
-  methods: {
-    getStyle,
-    getCanvasStyle,
-    changeStyleWithScale,
-
-    close() {
-      this.$emit("close");
-    },
-
-    htmlToImage() {
-      toPng(this.$refs.container.querySelector(".canvas"))
-        .then((dataUrl) => {
-          const a = document.createElement("a");
-          a.setAttribute("download", "screenshot");
-          a.href = dataUrl;
-          a.click();
-        })
-        .catch((error) => {
-          console.error("oops, something went wrong!", error);
-        })
-        .finally(this.close);
-    },
-  },
-};
+});
 </script>
 
 <style lang="scss" scoped>
