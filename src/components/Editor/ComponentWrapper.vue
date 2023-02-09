@@ -25,43 +25,7 @@
   </div>
 </template>
 
-<script>
-import { getStyle, getSVGStyle } from "@/utils/style";
-import runAnimation from "@/utils/runAnimation";
-import { mixins } from "@/utils/events";
-import eventBus from "@/utils/eventBus";
-
-export default {
-  mixins: [mixins],
-  props: {
-    config: {
-      type: Object,
-      required: true,
-      default: () => {},
-    },
-  },
-  mounted() {
-    runAnimation(this.$refs.component.$el, this.config.animations);
-  },
-  methods: {
-    getStyle,
-    getSVGStyle,
-
-    onClick() {
-      const events = this.config.events;
-      Object.keys(events).forEach((event) => {
-        this[event](events[event]);
-      });
-
-      eventBus.$emit("v-click", this.config.id);
-    },
-
-    onMouseEnter() {
-      eventBus.$emit("v-hover", this.config.id);
-    },
-  },
-};
-</script>
+<script setup lang="ts"></script>
 
 <style lang="scss" scoped>
 .component {
