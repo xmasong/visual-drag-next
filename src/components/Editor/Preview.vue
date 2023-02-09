@@ -3,7 +3,7 @@
     <el-button v-if="!isScreenshot" class="close" @click="$emit('close')"
       >关闭</el-button
     >
-    <!-- <el-button v-else class="close" @click="htmlToImage">确定</el-button>
+    <el-button v-else class="close" @click="htmlToImage">确定</el-button>
     <div class="canvas-container">
       <div
         class="canvas"
@@ -19,17 +19,25 @@
           :config="item"
         />
       </div>
-    </div> -->
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-const props = defineProps({
+import { useComponent } from "@/stores";
+import { getCanvasStyle, changeStyleWithScale } from "@/utils";
+import { cloneDeep } from "lodash";
+
+defineProps({
   isScreenshot: {
     type: Boolean,
     default: false,
   },
 });
+
+const { canvasStyleData, componentData } = useComponent();
+const copyData = cloneDeep(componentData);
+function htmlToImage() {}
 </script>
 
 <style lang="scss" scoped>

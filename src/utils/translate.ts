@@ -1,4 +1,6 @@
-// import { divide, multiply } from "mathjs";
+import { divide, multiply } from "mathjs";
+
+import { useComponent } from "@/stores";
 
 // 角度转弧度
 // Math.PI = 180 度
@@ -128,12 +130,13 @@ export function mod360(deg) {
   return (deg + 360) % 360;
 }
 
-// export function changeStyleWithScale(value) {
-//   return multiply(
-//     value,
-//     divide(parseInt(store.state.canvasStyleData.scale), 100)
-//   );
-// }
+export function changeStyleWithScale(value) {
+  const componentStore = useComponent();
+  return multiply(
+    value,
+    divide(parseInt(componentStore.canvasStyleData.scale as any), 100)
+  );
+}
 
 export function toPercent(val) {
   return val * 100 + "%";
