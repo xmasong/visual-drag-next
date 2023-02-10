@@ -27,7 +27,7 @@
 import { useComponent } from "@/stores";
 import { getCanvasStyle, changeStyleWithScale } from "@/utils";
 import { cloneDeep } from "lodash";
-
+import ComponentWrapper from "./ComponentWrapper.vue";
 defineProps({
   isScreenshot: {
     type: Boolean,
