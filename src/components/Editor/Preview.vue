@@ -39,10 +39,12 @@ defineProps({
 
 const { canvasStyleData, componentData } = useComponent();
 const copyData = cloneDeep(componentData);
+
 const emit = defineEmits(["close"]);
 function handleClose() {
   emit("close");
 }
+
 function htmlToImage() {
   toPng($(".preview-canvas"))
     .then((dataUrl) => {
