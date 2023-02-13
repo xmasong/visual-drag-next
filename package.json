@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "element-plus": "^2.2.27",
+    "html-to-image": "^1.11.3",
     "lodash": "^4.17.21",
     "mathjs": "^11.5.0",
     "mitt": "^3.0.0",

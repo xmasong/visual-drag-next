@@ -1,12 +1,12 @@
 <template>
   <div ref="container" class="bg">
-    <el-button v-if="!isScreenshot" class="close" @click="$emit('close')"
+    <el-button v-if="!isScreenshot" class="close" @click="handleClose"
       >关闭</el-button
     >
     <el-button v-else class="close" @click="htmlToImage">确定</el-button>
     <div class="canvas-container">
       <div
-        class="canvas"
+        class="preview-canvas"
         :style="{
           ...getCanvasStyle(canvasStyleData),
           width: changeStyleWithScale(canvasStyleData.width) + 'px',
@@ -25,9 +25,11 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
-import { getCanvasStyle, changeStyleWithScale } from "@/utils";
+import { getCanvasStyle, changeStyleWithScale, $ } from "@/utils";
 import { cloneDeep } from "lodash";
 import ComponentWrapper from "./ComponentWrapper.vue";
+import { toPng } from "html-to-image";
+
 defineProps({
   isScreenshot: {
     type: Boolean,
@@ -37,7 +39,23 @@ defineProps({
 
 const { canvasStyleData, componentData } = useComponent();
 const copyData = cloneDeep(componentData);
-function htmlToImage() {}
+const emit = defineEmits(["close"]);
+function handleClose() {
+  emit("close");
+}
+function htmlToImage() {
+  toPng($(".preview-canvas"))
+    .then((dataUrl) => {
+      const a = document.createElement("a");
+      a.setAttribute("download", "screenshot");
+      a.href = dataUrl;
+      a.click();
+    })
+    .catch((error) => {
+      console.error("oops, something went wrong!", error);
+    })
+    .finally(handleClose);
+}
 </script>
 
 <style lang="scss" scoped>
