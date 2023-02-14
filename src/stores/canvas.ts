@@ -75,6 +75,11 @@ export const useComponent = defineStore("component", () => {
   function setInEditorStatus(status) {
     isInEdiotr.value = status;
   }
+  // 编辑器模式 edit preview
+  const editMode = ref("edit");
+  function setEditMode(mode) {
+    editMode.value = mode;
+  }
   return {
     canvasStyleData,
     componentData,
@@ -82,6 +87,7 @@ export const useComponent = defineStore("component", () => {
     curComponentIndex,
     isClickComponent,
     isInEdiotr,
+    editMode,
     addComponent,
     setCurComponent,
     setComponentData,
@@ -90,5 +96,6 @@ export const useComponent = defineStore("component", () => {
     setClickComponentStatus,
     deleteComponent,
     setInEditorStatus,
+    setEditMode,
   };
 });

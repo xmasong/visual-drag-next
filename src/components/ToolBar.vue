@@ -6,13 +6,33 @@
       <el-button @click="redo">重做</el-button>
       <el-button @click="preview(false)">预览</el-button>
     </el-row>
+    <!-- 预览 -->
+    <Preview
+      v-if="isShowPreview"
+      :is-screenshot="isScreenshot"
+      @close="handlePreviewChange"
+    />
   </div>
 </template>
 <script setup lang="ts">
-import { useSnapshot } from "@/stores";
+import { useComponent, useSnapshot } from "@/stores";
+import { ref } from "vue";
 const { undo, redo } = useSnapshot();
 
-function preview(isScreenshot) {}
+const isShowPreview = ref(false);
+const isScreenshot = ref(false);
+const { setEditMode } = useComponent();
+
+function preview(isScreenshot) {
+  isScreenshot.value = isScreenshot;
+  isShowPreview.value = true;
+  setEditMode("preview");
+}
+
+function handlePreviewChange() {
+  isShowPreview.value = false;
+  setEditMode("edit");
+}
 </script>
 <style lang="scss">
 .tool-bar {
