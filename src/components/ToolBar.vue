@@ -4,7 +4,7 @@
       <el-button>JSON</el-button>
       <el-button @click="undo">撤销</el-button>
       <el-button @click="redo">重做</el-button>
-      <el-button @click="preview(false)">预览</el-button>
+      <el-button @click="preview">预览</el-button>
     </el-row>
     <!-- 预览 -->
     <Preview
@@ -17,14 +17,15 @@
 <script setup lang="ts">
 import { useComponent, useSnapshot } from "@/stores";
 import { ref } from "vue";
+import Preview from "./Editor/Preview.vue";
 const { undo, redo } = useSnapshot();
 
 const isShowPreview = ref(false);
 const isScreenshot = ref(false);
 const { setEditMode } = useComponent();
 
-function preview(isScreenshot) {
-  isScreenshot.value = isScreenshot;
+function preview() {
+  isScreenshot.value = false;
   isShowPreview.value = true;
   setEditMode("preview");
 }

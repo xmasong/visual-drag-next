@@ -80,7 +80,7 @@ function htmlToImage() {
     height: calc(100% - 120px);
     overflow: auto;
 
-    .canvas {
+    .preview-canvas {
       background: #fff;
       position: relative;
       margin: auto;
