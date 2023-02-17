@@ -4,6 +4,15 @@ import type { Component } from "@/types";
 import { cloneDeep } from "lodash";
 import { useComponent } from "./canvas";
 
+let defaultcomponentData = [];
+function getDefaultcomponentData() {
+  return defaultcomponentData;
+}
+
+export function setDefaultcomponentData(data = []) {
+  defaultcomponentData = data;
+}
+
 export const useSnapshot = defineStore("snapshot", () => {
   const snapshotData: Ref<Component[][]> = ref([]);
   const snapshotIndex: Ref<number> = ref(-1);
@@ -24,7 +33,9 @@ export const useSnapshot = defineStore("snapshot", () => {
   function undo() {
     if (snapshotIndex.value >= 0) {
       snapshotIndex.value--;
-      const componentData = cloneDeep(snapshotData.value[snapshotIndex.value]); // || getDefaultcomponentData();
+      const componentData = cloneDeep(
+        snapshotData.value[snapshotIndex.value] || getDefaultcomponentData()
+      );
       if (componentStore.curComponent) {
         // 如果当前组件不在 componentData 中，则置空
         const needClean = !componentData?.find(

@@ -42,8 +42,8 @@ function handlePreviewChange() {
 }
 
 function save() {
-  localStorage.setItem("canvasData", JSON.stringify(componentData));
-  localStorage.setItem("canvasStyle", JSON.stringify(canvasStyleData));
+  localStorage.setItem("canvasData", JSON.stringify(componentData.value));
+  localStorage.setItem("canvasStyle", JSON.stringify(canvasStyleData.value));
   ElMessage.success("保存成功");
 }
 // use for shortcutKey

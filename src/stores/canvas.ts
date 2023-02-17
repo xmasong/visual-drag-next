@@ -3,16 +3,6 @@ import { defineStore } from "pinia";
 import type { Component, ComponentParams, Pos } from "@/types";
 
 export const useComponent = defineStore("component", () => {
-  const canvasStyleData = reactive({
-    // 页面全局数据
-    width: 1200,
-    height: 740,
-    scale: 100,
-    color: "#000",
-    opacity: 1,
-    background: "#fff",
-    fontSize: 14,
-  });
   const componentData: Ref<Component[]> = ref([]);
   const curComponent: Ref<Component | undefined | null> = ref();
   const curComponentIndex: Ref<number | undefined | null> = ref();
@@ -80,6 +70,20 @@ export const useComponent = defineStore("component", () => {
   function setEditMode(mode) {
     editMode.value = mode;
   }
+
+  let canvasStyleData = reactive({
+    // 页面全局数据
+    width: 1200,
+    height: 740,
+    scale: 100,
+    color: "#000",
+    opacity: 1,
+    background: "#fff",
+    fontSize: 14,
+  });
+  function setCanvasStyle(style) {
+    canvasStyleData = style;
+  }
   return {
     canvasStyleData,
     componentData,
@@ -97,5 +101,6 @@ export const useComponent = defineStore("component", () => {
     deleteComponent,
     setInEditorStatus,
     setEditMode,
+    setCanvasStyle,
   };
 });

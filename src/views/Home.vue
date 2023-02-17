@@ -47,6 +47,7 @@ import {
   useContextMenu,
   useCompose,
   useSnapshot,
+  setDefaultcomponentData,
 } from "@/stores";
 import { storeToRefs } from "pinia";
 import { listenGlobalKeyDown } from "@/utils";
@@ -111,6 +112,23 @@ function deselectCurComponent(e: MouseEvent) {
     hideContextMenu();
   }
 }
+
+function restore() {
+  const { setComponentData, setCanvasStyle } = componentStore;
+  // 用保存的数据恢复画布
+  const canvasData = localStorage.getItem("canvasData");
+  const canvasStyle = localStorage.getItem("canvasStyle");
+  if (canvasData) {
+    setDefaultcomponentData(JSON.parse(canvasData));
+    setComponentData(JSON.parse(canvasData));
+  }
+
+  if (canvasStyle) {
+    setCanvasStyle(canvasStyle);
+  }
+}
+// onCreated
+restore();
 </script>
 <style lang="scss">
 .home {
