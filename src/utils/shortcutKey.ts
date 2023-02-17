@@ -1,5 +1,6 @@
 import { useComponent, useSnapshot } from "@/stores";
 import { storeToRefs } from "pinia";
+import { eventBus } from "./eventBus";
 
 const ctrlKey = 17,
   commandKey = 91, // mac command
@@ -25,7 +26,7 @@ const basemap = {
   [vKey]: todo,
   [yKey]: redo,
   [zKey]: undo,
-  [sKey]: todo,
+  [sKey]: save,
   [pKey]: todo,
   [eKey]: todo,
 };
@@ -103,6 +104,10 @@ function redo() {
 function undo() {
   const { undo } = useSnapshot();
   undo();
+}
+
+function save() {
+  eventBus.emit("save");
 }
 
 function deleteComponent() {

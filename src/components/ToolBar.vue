@@ -22,6 +22,7 @@ import { ref } from "vue";
 import Preview from "./Editor/Preview.vue";
 import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
+import { eventBus } from "@/utils";
 const { undo, redo } = useSnapshot();
 
 const isShowPreview = ref(false);
@@ -45,6 +46,8 @@ function save() {
   localStorage.setItem("canvasStyle", JSON.stringify(canvasStyleData));
   ElMessage.success("保存成功");
 }
+// use for shortcutKey
+eventBus.on("save", () => save());
 </script>
 <style lang="scss">
 .tool-bar {

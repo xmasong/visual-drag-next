@@ -98,8 +98,6 @@ function chooseTheTureLine(needToShow, isDownward, isRightward) {
 }
 
 function showLine(isDownward, isRightward) {
-  // Todo: 偶现conditions内lineNode为undefined，加个非空判断观察一阵子；
-  if (!lineRef.value) return;
   const curComponentStyle = getComponentRotatedStyle(curComponent.value?.style);
   const curComponentHalfwidth = curComponentStyle.width / 2;
   const curComponentHalfHeight = curComponentStyle.height / 2;
@@ -212,6 +210,8 @@ function showLine(isDownward, isRightward) {
               ? translateCurComponentShift(key, condition, curComponentStyle)
               : condition.dragShift,
         });
+        // Todo: condition.lineNode 偶现undefined
+        console.log("@@@condition", condition);
         condition.lineNode.style[key] = `${condition.lineShift}px`;
         needToShow.push(condition.line);
       });
@@ -231,8 +231,7 @@ onMounted(() => {
     showLine(isDownward, isRightward);
   });
 
-  eventBus.on("unmove", hideLine);
-  console.log("@@@ref", lineRef.value);
+  eventBus.on("unmove", () => hideLine());
 });
 </script>
 
