@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { eventBus, getStyle } from "@/utils";
 import { events } from "@/utils/events";
-const store = defineProps({
+const props = defineProps({
   config: {
     type: Object,
     required: true,
@@ -37,15 +37,15 @@ const store = defineProps({
 });
 
 function onClick() {
-  const configEvents = store.config.events;
+  const configEvents = props.config.events;
   Object.keys(configEvents).forEach((configEvent) => {
     events[configEvent](configEvents[configEvent]);
   });
 
-  eventBus.emit("v-click", store.config.id);
+  eventBus.emit("v-click", props.config.id);
 }
 function onMouseEnter() {
-  eventBus.emit("v-hover", store.config.id);
+  eventBus.emit("v-hover", props.config.id);
 }
 </script>
 
