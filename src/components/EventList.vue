@@ -53,6 +53,7 @@
 import { useComponent } from "@/stores";
 import { eventList } from "@/utils";
 import { ref } from "vue";
+import Modal from "./Modal.vue";
 const isShowEvent = ref(false);
 const eventActiveName = ref("redirect");
 
