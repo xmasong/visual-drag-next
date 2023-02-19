@@ -28,7 +28,7 @@
             <!-- <AnimationList /> -->
           </el-tab-pane>
           <el-tab-pane label="事件" name="events" style="padding-top: 20px">
-            <!-- <EventList /> -->
+            <EventList />
           </el-tab-pane>
         </el-tabs>
       </section>
@@ -38,6 +38,7 @@
 <script setup lang="ts">
 import ComponentList from "@/components/ComponentList.vue";
 import Editor from "@/components/Editor/Editor.vue";
+import EventList from "@/components/EventList.vue";
 import ToolBar from "@/components/ToolBar.vue";
 import componentList from "@/custom-component/component-list";
 import { cloneDeep } from "lodash";
