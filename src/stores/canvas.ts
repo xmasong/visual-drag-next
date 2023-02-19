@@ -84,6 +84,16 @@ export const useComponent = defineStore("component", () => {
   function setCanvasStyle(style) {
     canvasStyleData = style;
   }
+
+  function addEvent({ event, param }) {
+    if (!curComponent.value) return;
+    curComponent.value.events[event] = param;
+  }
+
+  function removeEvent(event) {
+    if (!curComponent.value) return;
+    delete curComponent.value.events[event];
+  }
   return {
     canvasStyleData,
     componentData,
@@ -102,5 +112,7 @@ export const useComponent = defineStore("component", () => {
     setInEditorStatus,
     setEditMode,
     setCanvasStyle,
+    addEvent,
+    removeEvent,
   };
 });

@@ -9,6 +9,7 @@ export interface Component {
   style: Record<string, any>;
   // common attr
   collapseName?: string;
+  events?: any;
 }
 
 export interface ComponentParams {

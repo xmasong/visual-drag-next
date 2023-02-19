@@ -2,12 +2,12 @@
   <div class="event-list">
     <div class="div-events">
       <el-button @click="isShowEvent = true">添加事件</el-button>
-      <div>
+      <div v-if="componentStore.curComponent">
         <el-tag
-          v-for="event in Object.keys(curComponent.events)"
+          v-for="event in Object.keys(componentStore.curComponent.events)"
           :key="event"
           closable
-          @close="removeEvent(event)"
+          @close="handleRemoveEvent(event)"
         >
           {{ event }}
         </el-tag>
@@ -29,18 +29,18 @@
             v-model="item.param"
             type="textarea"
             placeholder="请输入完整的 URL"
-            @keydown.native.stop
+            @keydown.stop
           />
           <el-input
             v-if="item.key == 'alert'"
             v-model="item.param"
             type="textarea"
             placeholder="请输入要 alert 的内容"
-            @keydown.native.stop
+            @keydown.stop
           />
           <el-button
             style="margin-top: 20px"
-            @click="addEvent(item.key, item.param)"
+            @click="handleAddEvent(item.key, item.param)"
             >确定</el-button
           >
         </el-tab-pane>
@@ -49,33 +49,23 @@
   </div>
 </template>
 
-<script>
-import { mapState } from "vuex";
-import Modal from "@/components/Modal";
-import { eventList } from "@/utils/events";
+<script setup lang="ts">
+import { useComponent } from "@/stores";
+import { eventList } from "@/utils";
+import { ref } from "vue";
+const isShowEvent = ref(false);
+const eventActiveName = ref("redirect");
 
-export default {
-  components: { Modal },
-  data() {
-    return {
-      isShowEvent: false,
-      eventURL: "",
-      eventActiveName: "redirect",
-      eventList,
-    };
-  },
-  computed: mapState(["curComponent"]),
-  methods: {
-    addEvent(event, param) {
-      this.isShowEvent = false;
-      this.$store.commit("addEvent", { event, param });
-    },
+const componentStore = useComponent();
+const { addEvent, removeEvent } = componentStore;
+function handleAddEvent(event, param) {
+  isShowEvent.value = false;
+  addEvent({ event, param });
+}
 
-    removeEvent(event) {
-      this.$store.commit("removeEvent", event);
-    },
-  },
-};
+function handleRemoveEvent(event) {
+  removeEvent(event);
+}
 </script>
 
 <style lang="scss" scoped>
