@@ -1,33 +1,22 @@
 <template>
-  <div v-if="show" class="modal-bg" @click="hide">
+  <div
+    v-if="modelValue"
+    class="modal-bg"
+    @click="$emit('update:modelValue', false)"
+  >
     <div class="fadeInLeft animated modal" @click="stopPropagation">
       <slot></slot>
     </div>
   </div>
 </template>
 
-<script lang="js">
-export default {
-  model: {
-    prop: "show",
-    event: "change",
-  },
-  props: {
-    show: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  methods: {
-    hide() {
-      this.$emit("change");
-    },
+<script setup lang="ts">
+defineProps(["modelValue"]);
+defineEmits(["update:modelValue"]);
 
-    stopPropagation(e) {
-      e.stopPropagation();
-    },
-  },
-};
+function stopPropagation(e) {
+  e.stopPropagation();
+}
 </script>
 
 <style lang="scss" scoped>
