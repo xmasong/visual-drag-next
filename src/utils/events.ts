@@ -14,7 +14,7 @@ const events = {
   },
 };
 
-const eventList = [
+const getEventList = () => [
   {
     key: "redirect",
     label: "跳转事件",
@@ -29,4 +29,4 @@ const eventList = [
   },
 ];
 
-export { events, eventList };
+export { events, getEventList };

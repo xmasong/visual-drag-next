@@ -51,17 +51,19 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
-import { eventList } from "@/utils";
+import { getEventList } from "@/utils";
 import { ref } from "vue";
 import Modal from "./Modal.vue";
 const isShowEvent = ref(false);
 const eventActiveName = ref("redirect");
 
+const eventList = ref(getEventList());
 const componentStore = useComponent();
 const { addEvent, removeEvent } = componentStore;
 function handleAddEvent(event, param) {
   isShowEvent.value = false;
   addEvent({ event, param });
+  eventList.value = getEventList();
 }
 
 function handleRemoveEvent(event) {
