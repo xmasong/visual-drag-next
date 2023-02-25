@@ -10,6 +10,7 @@ export interface Component {
   // common attr
   collapseName?: string;
   events?: any;
+  animations?: any;
 }
 
 export interface ComponentParams {

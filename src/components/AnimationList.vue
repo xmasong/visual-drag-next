@@ -3,9 +3,9 @@
     <div class="div-animation">
       <el-button @click="isShowAnimation = true">添加动画</el-button>
       <el-button @click="previewAnimate">预览动画</el-button>
-      <div>
+      <div v-if="componentStore.curComponent">
         <el-tag
-          v-for="(tag, index) in curComponent.animations"
+          v-for="(tag, index) in componentStore.curComponent.animations"
           :key="index"
           closable
           @close="removeAnimation(index)"
@@ -54,65 +54,24 @@
   </div>
 </template>
 
-<script>
-import Modal from "@/components/Modal";
-import eventBus from "@/utils/eventBus";
-import animationClassData from "@/utils/animationClassData";
-import { mapState } from "vuex";
-import runAnimation from "@/utils/runAnimation";
-import AnimationSettingModal from "./AnimationSettingModal.vue";
+<script setup lang="ts">
+import { useComponent } from "@/stores";
+import { eventBus } from "@/utils";
+import { ref } from "vue";
 
-export default {
-  components: { Modal, AnimationSettingModal },
-  data() {
-    return {
-      isShowAnimation: false,
-      hoverPreviewAnimate: "",
-      animationActiveName: "进入",
-      animationClassData,
-      showAnimatePanel: false,
-      timer: null,
-      isShowAnimationSetting: false,
-      curIndex: 0,
-    };
-  },
-  computed: mapState(["curComponent"]),
-  methods: {
-    addAnimation(animate) {
-      this.$store.commit("addAnimation", animate);
-      this.isShowAnimation = false;
-    },
+const isShowAnimation = ref(false);
+const componentStore = useComponent();
+function previewAnimate() {
+  eventBus.emit("runAnimation");
+}
 
-    previewAnimate() {
-      eventBus.$emit("runAnimation");
-    },
-
-    removeAnimation(index) {
-      this.$store.commit("removeAnimation", index);
-      if (!this.curComponent.animations.length) {
-        // 清空动画数据，停止运动
-        eventBus.$emit("stopAnimation");
-      }
-    },
-
-    handleAnimationSetting(index) {
-      this.isShowAnimationSetting = true;
-      this.curIndex = index;
-    },
-
-    async runAnimation(animate) {
-      if (animate.pending) return;
-
-      animate.pending = true;
-      await runAnimation(this.$refs[animate.value][0], [animate]);
-
-      // 防止无限触发同一元素的动画
-      setTimeout(() => {
-        animate.pending = false;
-      }, 100);
-    },
-  },
-};
+function removeAnimation(index) {
+  //   this.$store.commit("removeAnimation", index);
+  if (!componentStore.curComponent?.animations.length) {
+    // 清空动画数据，停止运动
+    eventBus.emit("stopAnimation");
+  }
+}
 </script>
 
 <style lang="scss">
