@@ -8,7 +8,7 @@
           v-for="(tag, index) in componentStore.curComponent.animations"
           :key="index"
           closable
-          @close="removeAnimation(index)"
+          @close="handleRemoveAnimation(index)"
         >
           {{ tag.label }}
           <i
@@ -55,22 +55,31 @@
 </template>
 
 <script setup lang="ts">
-import { useComponent } from "@/stores";
+import { useAnimation, useComponent } from "@/stores";
 import { eventBus } from "@/utils";
 import { ref } from "vue";
 
 const isShowAnimation = ref(false);
+const isShowAnimationSetting = ref(false);
+const curIndex = ref(0);
 const componentStore = useComponent();
+const { removeAnimation } = useAnimation();
+
 function previewAnimate() {
   eventBus.emit("runAnimation");
 }
 
-function removeAnimation(index) {
-  //   this.$store.commit("removeAnimation", index);
+function handleRemoveAnimation(index) {
+  removeAnimation(index);
   if (!componentStore.curComponent?.animations.length) {
     // 清空动画数据，停止运动
     eventBus.emit("stopAnimation");
   }
+}
+
+function handleAnimationSetting(index) {
+  isShowAnimationSetting.value = true;
+  curIndex.value = index;
 }
 </script>
 
