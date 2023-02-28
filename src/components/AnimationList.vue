@@ -57,13 +57,18 @@
 <script setup lang="ts">
 import { useAnimation, useComponent } from "@/stores";
 import { eventBus } from "@/utils";
+import animationClassData from "@/utils/animationClassData";
+import runAnimation from "@/utils/runAnimation";
 import { ref } from "vue";
+import Modal from "./Modal.vue";
 
 const isShowAnimation = ref(false);
 const isShowAnimationSetting = ref(false);
 const curIndex = ref(0);
+const animationActiveName = ref("进入");
+
 const componentStore = useComponent();
-const { removeAnimation } = useAnimation();
+const { addAnimation, removeAnimation } = useAnimation();
 
 function previewAnimate() {
   eventBus.emit("runAnimation");
