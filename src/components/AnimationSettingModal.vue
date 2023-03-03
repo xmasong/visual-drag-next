@@ -33,11 +33,23 @@
 </template>
 
 <script setup lang="ts">
+import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
+import { reactive, ref, computed } from "vue";
+
 const props = defineProps({
   curIndex: {
     type: Number,
     default: 0,
   },
+});
+const centerDialogVisible = ref(true);
+const config = reactive({});
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
+
+const isDisabled = computed(() => {
+  return curComponent.value?.animations.length > 1;
 });
 </script>
 
