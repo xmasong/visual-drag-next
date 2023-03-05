@@ -2,7 +2,7 @@
   <div class="animation-list">
     <div class="div-animation">
       <el-button @click="isShowAnimation = true">添加动画</el-button>
-      <el-button @click="previewAnimate">预览动画</el-button>
+      <el-button @click="handlePreviewAnimate">预览动画</el-button>
       <div v-if="componentStore.curComponent">
         <el-tag
           v-for="(tag, index) in componentStore.curComponent.animations"
@@ -71,7 +71,7 @@ const animationActiveName = ref("进入");
 const componentStore = useComponent();
 const { addAnimation, removeAnimation } = useAnimation();
 
-function previewAnimate() {
+function handlePreviewAnimate() {
   eventBus.emit("runAnimation");
 }
 

@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="shapeRef"
     class="shape"
     :class="{ active }"
     @mousedown="handleMouseDownOnShape"
@@ -18,13 +19,15 @@
 <script setup lang="ts">
 import { useComponent } from "@/stores/canvas";
 import type { Pos, Component } from "@/types";
-import { ref, nextTick } from "vue";
+import { ref, nextTick, onMounted } from "vue";
 import {
   getShapeStyle,
   calculateComponentPositonAndSize,
   eventBus,
 } from "@/utils";
 import { useCompose, useSnapshot } from "@/stores";
+import { storeToRefs } from "pinia";
+import runAnimation from "@/utils/runAnimation";
 
 const componentStore = useComponent();
 const {
@@ -33,7 +36,7 @@ const {
   setClickComponentStatus,
   setInEditorStatus,
 } = componentStore;
-
+const { curComponent } = storeToRefs(componentStore);
 const { recordSnapshot } = useSnapshot();
 const props = defineProps({
   element: {
@@ -247,6 +250,18 @@ function handleMouseDownOnPoint(point, e) {
   document.addEventListener("mousemove", move);
   document.addEventListener("mouseup", up);
 }
+
+const shapeRef = ref();
+onMounted(() => {
+  eventBus.on("runAnimation", () => {
+    if (props.element == curComponent.value) {
+      runAnimation(shapeRef.value, curComponent.value.animations);
+    }
+  });
+  eventBus.on("stopAnimation", () => {
+    shapeRef.value.classList.remove("animated", "infinite");
+  });
+});
 </script>
 <style lang="scss">
 .shape {
