@@ -33,7 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { useComponent } from "@/stores";
+import { useAnimation, useComponent } from "@/stores";
+import { eventBus } from "@/utils";
 import { storeToRefs } from "pinia";
 import { reactive, ref, computed } from "vue";
 
@@ -44,13 +45,43 @@ const props = defineProps({
   },
 });
 const centerDialogVisible = ref(true);
-const config = reactive({});
 const componentStore = useComponent();
 const { curComponent } = storeToRefs(componentStore);
+const {
+  label,
+  animationTime,
+  isLoop = false,
+  value,
+} = curComponent.value!.animations[props.curIndex] || {};
+
+const config = reactive({
+  animationTime,
+  label,
+  isLoop,
+  value,
+});
 
 const isDisabled = computed(() => {
   return curComponent.value?.animations.length > 1;
 });
+
+const emit = defineEmits(["close"]);
+function handleCloseModal() {
+  emit("close");
+}
+
+const { alterAnimation } = useAnimation();
+function handleSaveSetting() {
+  alterAnimation({
+    index: props.curIndex,
+    data: {
+      animationTime: config.animationTime,
+      isLoop: config.isLoop,
+    },
+  });
+  eventBus.emit("stopAnimation");
+  handleCloseModal();
+}
 </script>
 
 <style scoped lang="scss">
