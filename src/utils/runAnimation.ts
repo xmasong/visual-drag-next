@@ -1,4 +1,4 @@
-export default async function runAnimation($el, animations = []) {
+export default async function runAnimation($el, animations: any[] = []) {
   const play = (animation) =>
     new Promise((resolve) => {
       const { animationTime, value = "", isLoop } = animation;

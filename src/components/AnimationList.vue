@@ -30,12 +30,12 @@
         >
           <el-scrollbar class="animate-container">
             <div
-              v-for="animate in item.children"
-              :ref="animate.value"
+              ref="animateRef"
+              v-for="(animate, index) in item.children"
               :key="animate.value"
               class="animate"
-              @mouseenter="runAnimation(animate)"
-              @click="addAnimation(animate)"
+              @mouseenter="handleRunAnimation(animate, index)"
+              @click="handleAddAnimation(animate)"
             >
               <div>
                 {{ animate.label }}
@@ -60,6 +60,7 @@ import { eventBus } from "@/utils";
 import animationClassData from "@/utils/animationClassData";
 import runAnimation from "@/utils/runAnimation";
 import { ref } from "vue";
+import AnimationSettingModal from "./AnimationSettingModal.vue";
 import Modal from "./Modal.vue";
 
 const isShowAnimation = ref(false);
@@ -74,6 +75,11 @@ function previewAnimate() {
   eventBus.emit("runAnimation");
 }
 
+function handleAddAnimation(animate) {
+  addAnimation(animate);
+  isShowAnimation.value = false;
+}
+
 function handleRemoveAnimation(index) {
   removeAnimation(index);
   if (!componentStore.curComponent?.animations.length) {
@@ -85,6 +91,19 @@ function handleRemoveAnimation(index) {
 function handleAnimationSetting(index) {
   isShowAnimationSetting.value = true;
   curIndex.value = index;
+}
+
+const animateRef = ref();
+async function handleRunAnimation(animate, index) {
+  if (animate.pending) return;
+
+  animate.pending = true;
+  await runAnimation(animateRef.value[index], [animate]);
+
+  // 防止无限触发同一元素的动画
+  setTimeout(() => {
+    animate.pending = false;
+  }, 100);
 }
 </script>
 
