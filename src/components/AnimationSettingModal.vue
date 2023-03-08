@@ -1,7 +1,7 @@
 <template>
   <el-dialog
     :title="`${config.label} 动画配置`"
-    :visible="centerDialogVisible"
+    v-model="centerDialogVisible"
     width="30%"
     center
     @close="handleCloseModal"
@@ -25,10 +25,10 @@
       >
       </el-switch>
     </div>
-    <slot name="footer" class="dialog-footer">
+    <template #footer>
       <el-button @click="handleCloseModal">取 消</el-button>
       <el-button type="primary" @click="handleSaveSetting">确 定</el-button>
-    </slot>
+    </template>
   </el-dialog>
 </template>
 
@@ -88,6 +88,8 @@ function handleSaveSetting() {
 .animation-setting {
   .loop {
     margin-top: 10px;
+  }
+  .dialog-footer {
   }
 }
 </style>

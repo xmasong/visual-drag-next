@@ -11,10 +11,10 @@
           @close="handleRemoveAnimation(index)"
         >
           {{ tag.label }}
-          <Setting
+          <SettingIcon
             class="cursor el-icon-setting"
             @click="handleAnimationSetting(index)"
-          ></Setting>
+          ></SettingIcon>
         </el-tag>
       </div>
     </div>
@@ -62,7 +62,7 @@ import runAnimation from "@/utils/runAnimation";
 import { ref } from "vue";
 import AnimationSettingModal from "./AnimationSettingModal.vue";
 import Modal from "./Modal.vue";
-import { Setting } from "@element-plus/icons-vue";
+import { Setting as SettingIcon } from "@element-plus/icons-vue";
 
 const isShowAnimation = ref(false);
 const isShowAnimationSetting = ref(false);
@@ -112,6 +112,9 @@ async function handleRunAnimation(animate, index) {
 .animation-list {
   .cursor {
     cursor: pointer;
+  }
+  .el-icon-setting {
+    font-size: 16px;
   }
 
   .div-animation {
