@@ -10,7 +10,7 @@
           closable
           @close="handleRemoveAnimation(index)"
         >
-          {{ tag.label }}
+          <span>{{ tag.label }}</span>
           <SettingIcon
             class="cursor el-icon-setting"
             @click="handleAnimationSetting(index)"
@@ -114,7 +114,7 @@ async function handleRunAnimation(animate, index) {
     cursor: pointer;
   }
   .el-icon-setting {
-    font-size: 16px;
+    width: 14px;
   }
 
   .div-animation {
@@ -125,7 +125,8 @@ async function handleRunAnimation(animate, index) {
     }
 
     .el-tag {
-      display: block;
+      display: flex;
+      align-items: center;
       width: 50%;
       margin: auto;
       margin-bottom: 10px;
@@ -157,6 +158,11 @@ async function handleRunAnimation(animate, index) {
       user-select: none;
       cursor: pointer;
     }
+  }
+
+  .el-tag__content {
+    display: flex;
+    align-items: center;
   }
 }
 </style>
