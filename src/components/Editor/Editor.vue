@@ -1,5 +1,7 @@
 <template>
   <div class="editor" id="editor" @contextmenu="handleContextMenu">
+    <!-- 网格线 -->
+    <Grid />
     <!--页面组件列表展示-->
     <Shape
       v-for="(item, index) in componentData"
@@ -28,6 +30,7 @@ import { useComponent, useContextMenu, useCompose } from "@/stores/index";
 import Shape from "./Shape.vue";
 import MarkLine from "./MarkLine.vue";
 import ContextMenu from "../ContextMenu.vue";
+import Grid from "./Grid.vue";
 import { storeToRefs } from "pinia";
 import { getStyle } from "@/utils";
 import { onMounted } from "vue";
