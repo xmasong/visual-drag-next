@@ -27,8 +27,8 @@ const basemap = {
   [yKey]: redo,
   [zKey]: undo,
   [sKey]: save,
-  [pKey]: todo,
-  [eKey]: todo,
+  [pKey]: preview,
+  [eKey]: clearCanvas,
 };
 
 // 组件锁定状态下可以执行的操作
@@ -110,6 +110,10 @@ function save() {
   eventBus.emit("save");
 }
 
+function preview() {
+  eventBus.emit("preview");
+}
+
 function deleteComponent() {
   const componentStore = useComponent();
   const { curComponent } = storeToRefs(componentStore);
@@ -120,4 +124,8 @@ function deleteComponent() {
     deleteComponent();
     recordSnapshot();
   }
+}
+
+function clearCanvas() {
+  eventBus.emit("clearCanvas");
 }

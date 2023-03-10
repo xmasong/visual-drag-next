@@ -1,11 +1,12 @@
 <template>
   <div class="tool-bar">
     <el-row>
-      <el-button>JSON</el-button>
+      <!-- <el-button>JSON</el-button> -->
       <el-button @click="undo">撤销</el-button>
       <el-button @click="redo">重做</el-button>
       <el-button @click="preview">预览</el-button>
       <el-button @click="save">保存</el-button>
+      <el-button @click="clearCanvas">清空画布</el-button>
     </el-row>
 
     <!-- 预览 -->
@@ -46,8 +47,18 @@ function save() {
   localStorage.setItem("canvasStyle", JSON.stringify(canvasStyleData.value));
   ElMessage.success("保存成功");
 }
+
+const { setCurComponent, setComponentData } = componentStore;
+const { recordSnapshot } = useSnapshot();
+function clearCanvas() {
+  setCurComponent({ component: null, index: null });
+  setComponentData([]);
+  recordSnapshot();
+}
 // use for shortcutKey
 eventBus.on("save", () => save());
+eventBus.on("preview", () => preview());
+eventBus.on("clearCanvas", () => clearCanvas());
 </script>
 <style lang="scss">
 .tool-bar {
