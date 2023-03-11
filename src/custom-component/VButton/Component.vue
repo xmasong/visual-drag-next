@@ -2,15 +2,8 @@
   <button class="v-button">{{ propValue }}</button>
 </template>
 
-<script lang="ts">
-export default {
-  props: {
-    propValue: {
-      type: String,
-      default: "",
-    },
-  },
-};
+<script setup lang="ts">
+defineProps(["propValue"]);
 </script>
 
 <style lang="scss">
