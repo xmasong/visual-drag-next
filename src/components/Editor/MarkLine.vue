@@ -211,7 +211,7 @@ function showLine(isDownward, isRightward) {
               : condition.dragShift,
         });
         // Todo: condition.lineNode 偶现undefined
-        console.log("@@@condition", condition);
+        // console.log("@@@condition", condition);
         condition.lineNode.style[key] = `${condition.lineShift}px`;
         needToShow.push(condition.line);
       });

@@ -1,6 +1,6 @@
 <template>
   <div style="overflow: hidden">
-    <canvas ref="canvas"></canvas>
+    <canvas ref="canvasRef"></canvas>
   </div>
 </template>
 
