@@ -5,13 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps(["propValue", "element"]);
 const canvasRef = ref();
 const canvasCtx = ref();
 const isFirst = ref(true);
 const img = ref();
+
+watch(() => props.element.style.width, drawImage);
+watch(() => props.element.style.height, drawImage);
+watch(() => props.propValue.flip.vertical, mirrorFlip);
+watch(() => props.propValue.flip.horizontal, mirrorFlip);
 
 function drawImage() {
   const { width, height } = props.element.style;
