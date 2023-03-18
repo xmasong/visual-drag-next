@@ -33,7 +33,7 @@
 import { useComponent } from "@/stores";
 import { eventBus } from "@/utils";
 import { storeToRefs } from "pinia";
-import { ref } from "vue";
+import { onBeforeUnmount, ref } from "vue";
 
 const props = defineProps(["propValue", "element"]);
 
@@ -49,6 +49,10 @@ function onComponentClick() {
     canEdit.value = false;
   }
 }
+
+onBeforeUnmount(() => {
+  eventBus.off("componentClick", onComponentClick);
+});
 </script>
 
 <style lang="scss" scoped>
