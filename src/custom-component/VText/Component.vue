@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
-import { eventBus } from "@/utils";
+import { eventBus, keycodes } from "@/utils";
 import { storeToRefs } from "pinia";
 import { onBeforeUnmount, ref } from "vue";
 
@@ -41,7 +41,6 @@ const componentStore = useComponent();
 const { editMode, curComponent } = storeToRefs(componentStore);
 
 const canEdit = ref(false);
-
 eventBus.on("componentClick", onComponentClick);
 function onComponentClick() {
   // 如果当前点击的组件 id 和 VText 不是同一个，需要设为不允许编辑 https://github.com/woai3c/visual-drag-demo/issues/90
@@ -50,6 +49,32 @@ function onComponentClick() {
   }
 }
 
+const ctrlKey = 17;
+const isCtrlDown = ref(false);
+function handleKeydown(e) {
+  // 阻止冒泡，防止触发复制、粘贴组件操作
+  canEdit.value && e.stopPropagation();
+  if (e.keyCode == ctrlKey) {
+    isCtrlDown.value = true;
+  } else if (
+    isCtrlDown.value &&
+    canEdit.value &&
+    keycodes.includes(e.keyCode)
+  ) {
+    e.stopPropagation();
+  } else if (e.keyCode == 46) {
+    // deleteKey
+    e.stopPropagation();
+  }
+}
+
+function handleKeyup(e) {
+  // 阻止冒泡，防止触发复制、粘贴组件操作
+  canEdit.value && e.stopPropagation();
+  if (e.keyCode == ctrlKey) {
+    isCtrlDown.value = false;
+  }
+}
 onBeforeUnmount(() => {
   eventBus.off("componentClick", onComponentClick);
 });
