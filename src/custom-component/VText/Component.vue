@@ -29,7 +29,27 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useComponent } from "@/stores";
+import { eventBus } from "@/utils";
+import { storeToRefs } from "pinia";
+import { ref } from "vue";
+
+const props = defineProps(["propValue", "element"]);
+
+const componentStore = useComponent();
+const { editMode, curComponent } = storeToRefs(componentStore);
+
+const canEdit = ref(false);
+
+eventBus.on("componentClick", onComponentClick);
+function onComponentClick() {
+  // 如果当前点击的组件 id 和 VText 不是同一个，需要设为不允许编辑 https://github.com/woai3c/visual-drag-demo/issues/90
+  if (curComponent.value!.id !== props.element.id) {
+    canEdit.value = false;
+  }
+}
+</script>
 
 <style lang="scss" scoped>
 .v-text {
