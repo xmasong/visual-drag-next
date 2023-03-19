@@ -8,7 +8,7 @@
   >
     <!-- tabindex >= 0 使得双击时聚焦该元素 -->
     <div
-      ref="text"
+      ref="textRef"
       :contenteditable="canEdit"
       :class="{ 'can-edit': canEdit }"
       tabindex="0"
@@ -33,7 +33,7 @@
 import { useComponent } from "@/stores";
 import { eventBus, keycodes } from "@/utils";
 import { storeToRefs } from "pinia";
-import { onBeforeUnmount, ref } from "vue";
+import { nextTick, onBeforeUnmount, ref } from "vue";
 
 const props = defineProps(["propValue", "element"]);
 
@@ -75,6 +75,61 @@ function handleKeyup(e) {
     isCtrlDown.value = false;
   }
 }
+
+const emit = defineEmits(["input"]);
+function handleInput(e) {
+  emit("input", props.element, e.target.innerHTML);
+}
+
+function handleMousedown(e) {
+  if (canEdit.value) e.stopPropagation();
+}
+
+function clearStyle(e) {
+  e.preventDefault();
+  const clp = e.clipboardData;
+  const text = clp.getData("text/plain") || "";
+  if (text !== "") {
+    document.execCommand("insertText", false, text);
+  }
+  emit("input", props.element, e.target.innerHTML);
+}
+
+function handleBlur(e) {
+  // eslint-disable-next-line
+  props.element.propValue = e.target.innerHTML || "&nbsp;";
+  const html = e.target.innerHTML;
+  if (html !== "") {
+    // eslint-disable-next-line
+    props.element.propValue = e.target.innerHTML;
+  } else {
+    // eslint-disable-next-line
+    props.element.propValue = "";
+    nextTick(() => {
+      // eslint-disable-next-line
+      props.element.propValue = "&nbsp;";
+    });
+  }
+  canEdit.value = false;
+}
+
+const textRef = ref();
+function setEdit() {
+  if (props.element.isLock) return;
+  canEdit.value = true;
+  // 全选
+  selectText(textRef.value.text);
+}
+
+function selectText(element) {
+  const selection = window.getSelection();
+  if (!selection) return;
+  const range = document.createRange();
+  range.selectNodeContents(element);
+  selection.removeAllRanges();
+  selection.addRange(range);
+}
+
 onBeforeUnmount(() => {
   eventBus.off("componentClick", onComponentClick);
 });
