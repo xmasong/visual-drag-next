@@ -1,7 +1,7 @@
 <template>
   <div class="attr-list">
     <CommonAttr></CommonAttr>
-    <el-form>
+    <el-form v-if="curComponent">
       <el-form-item label="内容">
         <el-input v-model="curComponent.propValue" type="textarea" :rows="3" />
       </el-form-item>
@@ -9,15 +9,11 @@
   </div>
 </template>
 
-<script>
+<script setup lang="ts">
 import CommonAttr from "@/custom-component/common/CommonAttr.vue";
+import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
 
-export default {
-  components: { CommonAttr },
-  computed: {
-    curComponent() {
-      return this.$store.state.curComponent;
-    },
-  },
-};
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
 </script>

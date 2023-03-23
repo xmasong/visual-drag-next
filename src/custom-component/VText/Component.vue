@@ -117,8 +117,9 @@ const textRef = ref();
 function setEdit() {
   if (props.element.isLock) return;
   canEdit.value = true;
+
   // 全选
-  selectText(textRef.value.text);
+  selectText(textRef.value);
 }
 
 function selectText(element) {
@@ -154,9 +155,9 @@ onBeforeUnmount(() => {
     cursor: text;
     height: 100%;
   }
-}
 
-.preview {
-  user-select: none;
+  .preview {
+    user-select: none;
+  }
 }
 </style>
