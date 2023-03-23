@@ -267,6 +267,9 @@ onMounted(() => {
 .shape {
   position: absolute;
 
+  &:hover {
+    cursor: move;
+  }
   &.active {
     outline: 1px solid #70c0ff;
     user-select: none;
