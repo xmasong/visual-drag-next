@@ -111,17 +111,17 @@ const list: Component[] = [
       borderRadius: "",
       verticalAlign: "middle",
     },
-    // },
-    // {
-    //   component: "LineShape",
-    //   label: "直线",
-    //   propValue: "",
-    //   icon: "zhixian",
-    //   style: {
-    //     width: 200,
-    //     height: 2,
-    //     backgroundColor: "#000",
-    //   },
+  },
+  {
+    component: "LineShape",
+    label: "直线",
+    propValue: "",
+    icon: "zhixian",
+    style: {
+      width: 200,
+      height: 1,
+      backgroundColor: "#000",
+    },
     // },
     // {
     //   component: "CircleShape",
