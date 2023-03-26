@@ -18,7 +18,14 @@ app.use(ElementPlus);
 
 app.mount("#app");
 
-const components = ["VText", "Picture", "VButton", "RectShape", "LineShape"];
+const components = [
+  "VText",
+  "Picture",
+  "VButton",
+  "RectShape",
+  "LineShape",
+  "CircleShape",
+];
 
 components.forEach((key) => {
   app.component(
