@@ -24,6 +24,41 @@ const needUnit = [
   "letterSpacing",
   "borderRadius",
 ];
+// SVG需要过滤部分style, 如background 对应 SVG fill，在组件渲染时就过滤掉了，防止整个block染色
+export function getSVGStyle(style, filter: string[] = []) {
+  const result: CSSProperties = {};
+
+  [
+    "opacity",
+    "width",
+    "height",
+    "top",
+    "left",
+    "rotate",
+    "fontSize",
+    "fontWeight",
+    "lineHeight",
+    "letterSpacing",
+    "textAlign",
+    "color",
+  ].forEach((key) => {
+    if (!filter.includes(key)) {
+      if (key != "rotate") {
+        if (style[key] !== "") {
+          result[key] = style[key];
+
+          if (needUnit.includes(key)) {
+            result[key] += "px";
+          }
+        }
+      } else {
+        result.transform = key + "(" + style[key] + "deg)";
+      }
+    }
+  });
+
+  return result;
+}
 export function getStyle(style, filter: string[] = []) {
   const result: CSSProperties = {};
   Object.keys(style).forEach((key) => {

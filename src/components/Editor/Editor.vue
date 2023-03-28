@@ -11,6 +11,17 @@
       :index="index"
     >
       <component
+        :is="item.component"
+        v-if="item.component.startsWith('SVG')"
+        :id="'component' + item.id"
+        :style="getSVGStyle(item.style, svgFilterAttrs)"
+        class="component"
+        :prop-value="item.propValue"
+        :element="item"
+        :request="item.request"
+      />
+      <component
+        v-else
         class="component"
         :is="item.component"
         :id="'component' + item.id"
@@ -32,7 +43,7 @@ import MarkLine from "./MarkLine.vue";
 import ContextMenu from "../ContextMenu.vue";
 import Grid from "./Grid.vue";
 import { storeToRefs } from "pinia";
-import { getStyle } from "@/utils";
+import { getStyle, getSVGStyle } from "@/utils";
 import { onMounted } from "vue";
 // Shape相关
 const componentStore = useComponent();

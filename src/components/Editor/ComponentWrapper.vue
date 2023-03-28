@@ -1,6 +1,6 @@
 <template>
   <div @click="onClick" @mouseenter="onMouseEnter">
-    <!-- <component
+    <component
       :is="config.component"
       v-if="config.component.startsWith('SVG')"
       ref="component"
@@ -10,9 +10,9 @@
       :element="config"
       :request="config.request"
       :linkage="config.linkage"
-    /> -->
-
+    />
     <component
+      v-else
       :is="config.component"
       ref="component"
       class="component"
@@ -26,7 +26,7 @@
 </template>
 
 <script setup lang="ts">
-import { eventBus, getStyle } from "@/utils";
+import { eventBus, getStyle, getSVGStyle } from "@/utils";
 import { events } from "@/utils/events";
 const props = defineProps({
   config: {
