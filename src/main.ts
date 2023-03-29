@@ -26,6 +26,7 @@ const components = [
   "LineShape",
   "CircleShape",
   "SVGStar",
+  "SVGTriangle",
 ];
 
 components.forEach((key) => {
