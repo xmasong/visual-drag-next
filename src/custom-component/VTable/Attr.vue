@@ -2,27 +2,26 @@
   <div class="attr-list v-talbe-attr">
     <CommonAttr></CommonAttr>
     <EditTable></EditTable>
-    <el-form>
+    <el-form v-if="curComponent">
       <el-form-item label="斑马纹">
-        <el-switch v-model="propValue.stripe"></el-switch>
+        <el-switch
+          v-model="(curComponent.propValue as Record<string, any>).stripe"
+        ></el-switch>
       </el-form-item>
       <el-form-item label="表头加粗">
-        <el-switch v-model="propValue.thBold"></el-switch>
+        <el-switch
+          v-model="(curComponent.propValue as Record<string, any>).thBold"
+        ></el-switch>
       </el-form-item>
     </el-form>
   </div>
 </template>
 
-<script>
-import CommonAttr from "@/custom-component/common/CommonAttr";
-import EditTable from "./EditTable";
+<script setup lang="ts">
+import CommonAttr from "@/custom-component/common/CommonAttr.vue";
+import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
 
-export default {
-  components: { EditTable, CommonAttr },
-  computed: {
-    propValue() {
-      return this.$store.state.curComponent.propValue;
-    },
-  },
-};
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
 </script>
