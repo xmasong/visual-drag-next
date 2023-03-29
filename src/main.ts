@@ -27,6 +27,8 @@ const components = [
   "CircleShape",
   "SVGStar",
   "SVGTriangle",
+  "VTable",
+  "VChart",
 ];
 
 components.forEach((key) => {
