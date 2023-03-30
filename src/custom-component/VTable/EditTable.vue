@@ -1,163 +1,153 @@
 <template>
-    <div class="edit-table">
-        <table @dblclick="onDblclick">
-            <tbody>
-                <tr v-for="(item, row) in tableData" :key="row">
-                    <td
-                        v-for="(e, col) in item"
-                        :key="col"
-                        :class="{ selected: curTd === row + ',' + col }"
-                        @click="onClick(row, col)"
-                    >
-                        <el-input
-                            v-if="canEdit && curTd === row + ',' + col"
-                            v-model="tableData[row][col]"
-                            v-focus
-                            @blur="onBlur"
-                        ></el-input>
-                        <span v-else>{{ e }}</span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div>
-            <button @click="addRow">添加新行</button>
-            <button @click="addCol">添加新列</button>
-            <button @click="deleteRow">删除行</button>
-            <button @click="deleteCol">删除列</button>
-        </div>
+  <div class="edit-table">
+    <table @dblclick="handleDblclick">
+      <tbody>
+        <tr v-for="(item, row) in tableData" :key="row">
+          <td
+            v-for="(e, col) in item"
+            :key="col"
+            :class="{ selected: curTd === row + ',' + col }"
+            @click="handleClickCell(row, col)"
+          >
+            <el-input
+              v-if="canEdit && curTd === row + ',' + col"
+              v-model="tableData[row][col]"
+              v-focus
+              @blur="handleBlur"
+            ></el-input>
+            <span v-else>{{ e }}</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div>
+      <button @click="addRow">添加新行</button>
+      <button @click="addCol">添加新列</button>
+      <button @click="deleteRow">删除行</button>
+      <button @click="deleteCol">删除列</button>
     </div>
+  </div>
 </template>
 
-<script>
-export default {
-    directives: {
-        focus: {
-            // 指令的定义
-            inserted(el) {
-                // 聚焦元素
-                el.querySelector('input').focus()
-            },
-        },
-    },
-    data() {
-        return {
-            curProperty: '',
-            curTd: '',
-            canEdit: false,
-            preCurTd: '', // 失焦时 curTd 值为空，这时删除会读不到值，因此用这个变量来代替，用于删除行列
-        }
-    },
-    computed: {
-        tableData() {
-            return this.$store.state.curComponent.propValue.data
-        },
-    },
-    methods: {
-        onDblclick() {
-            this.canEdit = true
-        },
+<script setup lang="ts">
+import { useComponent } from "@/stores";
+import { computed, ref } from "vue";
+import { ElMessage } from "element-plus";
 
-        onClick(row, col) {
-            this.curTd = row + ',' + col
-            this.preCurTd = this.curTd
-        },
+const vFocus = {
+  mounted: (el) => el.querySelector("input").focus(),
+};
 
-        onBlur() {
-            this.canEdit = false
-            this.curTd = ''
-        },
+const curTd = ref("");
+const canEdit = ref(false);
+const curTdBackUp = ref("");
 
-        deleteRow() {
-            if (!this.preCurTd) {
-                this.$message.error('请先选择要删除的行')
-                return
-            }
+const componentStore = useComponent();
+const tableData = computed(
+  () => (componentStore.curComponent?.propValue as Record<string, any>).data
+);
 
-            const row = this.preCurTd.split(',')[0]
-            this.tableData.splice(row, 1)
-        },
+function handleDblclick() {
+  canEdit.value = true;
+}
 
-        addRow() {
-            this.tableData.push(new Array(this.tableData[0]?.length || 1).fill(' '))
-        },
+function handleClickCell(row, col) {
+  curTd.value = row + "," + col;
+  curTdBackUp.value = curTd.value;
+}
 
-        addCol() {
-            if (this.tableData.length) {
-                this.tableData.forEach(item => item.push(' '))
-            } else {
-                this.tableData.push([' '])
-            }
-        },
+function handleBlur() {
+  canEdit.value = false;
+  curTd.value = "";
+}
 
-        deleteCol() {
-            if (!this.preCurTd) {
-                this.$message.error('请先选择要删除的列')
-                return
-            }
+function addRow() {
+  tableData.value.push(new Array(tableData.value[0]?.length || 1).fill(" "));
+}
 
-            const col = this.preCurTd.split(',')[1]
-            this.tableData.forEach(item => {
-                item.splice(col, 1)
-            })
-        },
-    },
+function addCol() {
+  if (tableData.value.length) {
+    tableData.value.forEach((item) => item.push(" "));
+  } else {
+    tableData.value.push([" "]);
+  }
+}
+
+function deleteRow() {
+  if (!curTdBackUp.value) {
+    ElMessage.error("请先选择要删除的行");
+    return;
+  }
+
+  const row = curTdBackUp.value.split(",")[0];
+  tableData.value.splice(row, 1);
+}
+
+function deleteCol() {
+  if (!curTdBackUp.value) {
+    ElMessage.error("请先选择要删除的列");
+    return;
+  }
+
+  const col = curTdBackUp.value.split(",")[1];
+  tableData.value.forEach((item) => {
+    item.splice(col, 1);
+  });
 }
 </script>
 
 <style lang="scss" scoped>
 .edit-table {
-    overflow: auto;
-    margin-bottom: 8px;
+  overflow: auto;
+  margin-bottom: 8px;
 
-    & > div {
-        margin-top: 18px;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+  & > div {
+    margin-top: 18px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
 
-        button {
-            cursor: pointer;
-            background: #fff;
-            border: 1px solid #dcdfe6;
-            color: #606266;
-            text-align: center;
-            box-sizing: border-box;
-            outline: 0;
-            margin: 0;
-            font-weight: 500;
-            padding: 4px 10px;
-            font-size: 14px;
-            border-radius: 4px;
-            margin-bottom: 10px;
+    button {
+      cursor: pointer;
+      background: #fff;
+      border: 1px solid #dcdfe6;
+      color: #606266;
+      text-align: center;
+      box-sizing: border-box;
+      outline: 0;
+      margin: 0;
+      font-weight: 500;
+      padding: 4px 10px;
+      font-size: 14px;
+      border-radius: 4px;
+      margin-bottom: 10px;
 
-            &:hover {
-                background: #ecf5ff;
-                color: #409eff;
-            }
-        }
-    }
-
-    table {
-        border-collapse: collapse;
-        word-break: break-all;
-        word-wrap: break-word;
-        text-align: center;
-        font-size: 12px;
-
-        td {
-            border: 1px solid #ebeef5;
-            height: 40px;
-            min-width: 60px;
-            max-width: 80px;
-            padding: 10px;
-        }
-    }
-
-    .selected {
+      &:hover {
         background: #ecf5ff;
         color: #409eff;
+      }
     }
-}
+  }
 
+  table {
+    border-collapse: collapse;
+    word-break: break-all;
+    word-wrap: break-word;
+    text-align: center;
+    font-size: 12px;
+
+    td {
+      border: 1px solid #ebeef5;
+      height: 40px;
+      min-width: 60px;
+      max-width: 80px;
+      padding: 10px;
+    }
+  }
+
+  .selected {
+    background: #ecf5ff;
+    color: #409eff;
+  }
+}
 </style>

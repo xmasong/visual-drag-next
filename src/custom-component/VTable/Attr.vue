@@ -21,7 +21,7 @@
 import CommonAttr from "@/custom-component/common/CommonAttr.vue";
 import { useComponent } from "@/stores";
 import { storeToRefs } from "pinia";
-
+import EditTable from "./EditTable.vue";
 const componentStore = useComponent();
 const { curComponent } = storeToRefs(componentStore);
 </script>
