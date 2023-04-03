@@ -30,7 +30,7 @@
               <span
                 v-for="(chart, index) in charts"
                 :key="index"
-                @click="selectchart(chart.title)"
+                @click="selectchart(chart.type)"
               >
                 <el-dropdown-item>{{ chart.name }}</el-dropdown-item>
               </span>
@@ -44,7 +44,7 @@
     </el-form>
 
     <el-dialog title="数据修改" v-model:visible="dialogVisible" width="75%">
-      <div ref="ace" class="ace"></div>
+      <div ref="aceRef" class="ace"></div>
       <template #footer>
         <span class="dialog-footer">
           <el-button type="primary" @click="updatedata">更新数据</el-button>
@@ -61,9 +61,78 @@ import "ace-builds/src-min-noconflict/mode-json5";
 import CommonAttr from "@/custom-component/common/CommonAttr.vue";
 import { useComponent } from "@/stores";
 import { storeToRefs } from "pinia";
+import { computed, nextTick, ref } from "vue";
+import { ElMessage } from "element-plus";
 
 const componentStore = useComponent();
 const { curComponent } = storeToRefs(componentStore);
+const option = computed(
+  () => (curComponent.value?.propValue as Record<string, any>).option
+);
+const charts = [
+  {
+    type: "bar",
+    name: "柱状图",
+  },
+  {
+    type: "scatter",
+    name: "散点图",
+  },
+  {
+    type: "line",
+    name: "折线图",
+  },
+];
+
+const dialogVisible = ref(false);
+const editor = ref();
+const aceRef = ref();
+function openStaticWinbox() {
+  dialogVisible.value = !dialogVisible.value;
+  nextTick(() => {
+    ace.config.set(
+      "basePath",
+      "https://cdnjs.cloudflare.com/ajax/libs/ace/1.15.3/"
+    );
+    editor.value = ace.edit(aceRef.value, {
+      maxLines: 28,
+      minLines: 28,
+      fontSize: 14,
+      theme: "ace/theme/chrome",
+      mode: "ace/mode/json5",
+      tabSize: 4,
+      readOnly: false,
+      enableBasicAutocompletion: true,
+      enableLiveAutocompletion: true,
+      enableSnippets: true,
+    });
+    // 初始化图表数据在editor中
+    let data = JSON.stringify(option.value.series.data);
+    let xAxis = JSON.stringify(option.value.xAxis.data);
+    editor.value.setValue(data + "\n" + xAxis);
+  });
+}
+
+// 寻找数组[]
+function findstring(str, ch1, ch2) {
+  return str.substr(str.indexOf(ch1), str.indexOf(ch2) + 1);
+}
+
+// 更新数据editor中的数据修改
+function updatedata() {
+  let str = editor.value.getValue();
+  let Arrdata = findstring(str, "[", "]");
+  let ArrXAxis = findstring(str.substr(str.indexOf("]") + 1), "[", "]");
+  option.value.series.data = JSON.parse(Arrdata);
+  option.value.xAxis.data = JSON.parse(ArrXAxis);
+  ElMessage.success("更新成功");
+  dialogVisible.value = !dialogVisible.value;
+}
+
+// 更换表格类型
+function selectchart(chartType: string) {
+  option.value.series.type = chartType;
+}
 </script>
 
 <style>
