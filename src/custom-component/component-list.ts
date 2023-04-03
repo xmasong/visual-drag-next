@@ -215,7 +215,7 @@ const list: Component[] = [
   {
     component: "VChart",
     label: "图表",
-    icon: "ziyouquxian",
+    icon: "el-DataAnalysis",
     propValue: {
       chart: "VChart",
       option: {

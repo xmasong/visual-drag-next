@@ -7,12 +7,17 @@
       draggable="true"
       :data-index="index"
     >
-      <span class="iconfont" :class="'icon-' + item.icon"></span>
+      <DataAnalysis
+        v-if="item.icon === 'el-DataAnalysis'"
+        class="el-icon-custom"
+      />
+      <span v-else class="iconfont" :class="'icon-' + item.icon"></span>
     </div>
   </div>
 </template>
 <script setup lang="ts">
 import componentList from "@/custom-component/component-list";
+import { DataAnalysis } from "@element-plus/icons-vue";
 
 function handleDragStart(e: DragEvent) {
   if (!(e.target instanceof HTMLElement)) return;
@@ -48,7 +53,6 @@ function handleDragStart(e: DragEvent) {
     }
 
     .iconfont {
-      margin-right: 4px;
       font-size: 20px;
     }
 
@@ -59,6 +63,9 @@ function handleDragStart(e: DragEvent) {
 
     .icon-tupian {
       font-size: 16px;
+    }
+    .el-icon-custom {
+      width: 18px;
     }
   }
 }
