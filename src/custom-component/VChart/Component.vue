@@ -1,66 +1,49 @@
 <template>
-    <div>
-        <div ref="EChart"></div>
-    </div>
+  <div ref="echartRef"></div>
 </template>
 
-<script>
-import OnEvent from '../common/OnEvent'
+<script setup lang="ts">
+import { useComponent } from "@/stores";
+import { storeToRefs } from "pinia";
+import { onMounted, ref, watch } from "vue";
+import * as echarts from "echarts";
 
-export default {
-    extends: OnEvent,
-    props: {
-        propValue: {
-            type: Object,
-            require: true,
-            default: () => {},
-        },
-        element: {
-            type: Object,
-            default: () => {},
-        },
-    },
-    computed: {
-        curComponent() {
-            return this.$store.state.curComponent
-        },
-    },
-    watch: {
-        // 监听组件修改的内容，响应式修改数据
-        curComponent: {
-            deep: true,
-            handler() {
-                this.render()
-            },
-        },
-    },
-    mounted() {
-        // 初始化echarts，渲染大小
-        this.echart = this.$echarts.init(this.$refs.EChart, null, {
-            width: this.element.style.width,
-            height: this.element.style.height,
-        })
-        this.render()
-    },
-    methods: {
-        render() {
-            let EChart = this.echart
-            let option = this.propValue.option
-            // 设置参数
-            let config = {
-                ...option,
-            }
-            // 更新大小
-            this.echart.resize({
-                width: this.element.style.width, 
-                height: this.element.style.height,
-            })
-            // 配置参数
-            EChart.setOption(config)
-        },
-    },
+const props = defineProps(["propValue", "element"]);
+const componentStore = useComponent();
+const { curComponent } = storeToRefs(componentStore);
+watch(
+  curComponent,
+  () => {
+    renderChart();
+  },
+  { deep: true }
+);
+
+const echartRef = ref();
+const echartInstance = ref();
+onMounted(() => {
+  echartInstance.value = echarts.init(echartRef.value, undefined, {
+    width: props.element.style.width,
+    height: props.element.style.height,
+  });
+  renderChart();
+});
+
+function renderChart() {
+  let EChart = echartInstance.value;
+  let option = props.propValue.option;
+  // 设置参数
+  let config = {
+    ...option,
+  };
+  // 更新大小
+  echartInstance.value.resize({
+    width: props.element.style.width,
+    height: props.element.style.height,
+  });
+  // 配置参数
+  EChart.setOption(config);
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
+<style lang="scss" scoped></style>
