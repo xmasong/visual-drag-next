@@ -45,5 +45,3 @@ function renderChart() {
   EChart.setOption(config);
 }
 </script>
-
-<style lang="scss" scoped></style>
