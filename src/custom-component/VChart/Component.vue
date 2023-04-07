@@ -1,11 +1,13 @@
 <template>
-  <div ref="echartRef"></div>
+  <div>
+    <div ref="echartRef"></div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { useComponent } from "@/stores";
 import { storeToRefs } from "pinia";
-import { onMounted, ref, watch } from "vue";
+import { markRaw, onMounted, ref, watch } from "vue";
 import * as echarts from "echarts";
 
 const props = defineProps(["propValue", "element"]);
@@ -20,28 +22,29 @@ watch(
 );
 
 const echartRef = ref();
-const echartInstance = ref();
+let echartInstance: echarts.ECharts;
 onMounted(() => {
-  echartInstance.value = echarts.init(echartRef.value, undefined, {
-    width: props.element.style.width,
-    height: props.element.style.height,
-  });
+  echartInstance = markRaw(
+    echarts.init(echartRef.value, undefined, {
+      width: props.element.style.width,
+      height: props.element.style.height,
+    })
+  );
   renderChart();
 });
 
 function renderChart() {
-  let EChart = echartInstance.value;
   let option = props.propValue.option;
   // 设置参数
   let config = {
     ...option,
   };
   // 更新大小
-  echartInstance.value.resize({
+  echartInstance.resize({
     width: props.element.style.width,
     height: props.element.style.height,
   });
   // 配置参数
-  EChart.setOption(config);
+  echartInstance.setOption(config);
 }
 </script>

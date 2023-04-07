@@ -58,7 +58,6 @@ const props = defineProps({
 
 function handleMouseDownOnShape(e: MouseEvent) {
   e.stopPropagation();
-
   setInEditorStatus(true);
   setClickComponentStatus(true);
   setCurComponent({
