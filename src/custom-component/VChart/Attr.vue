@@ -1,5 +1,5 @@
 <template>
-  <div class="attr">
+  <div class="vchart-attr">
     <CommonAttr></CommonAttr>
     <el-form>
       <el-form-item label="标题">
@@ -43,7 +43,7 @@
       </el-form-item>
     </el-form>
 
-    <el-dialog title="数据修改" v-model:visible="dialogVisible" width="75%">
+    <el-dialog title="数据修改" v-model="dialogVisible" width="75%">
       <div ref="aceRef" class="ace"></div>
       <template #footer>
         <span class="dialog-footer">
@@ -135,15 +135,16 @@ function selectchart(chartType: string) {
 }
 </script>
 
-<style>
-.ace {
-  margin: 5px;
-  margin-top: -20px;
-  height: 600px;
-  width: 1100px;
-}
-
-.attr {
+<style lang="scss">
+.vchart-attr {
   margin: 13px;
+
+  .ace {
+    border: 1px solid #ebebeb;
+
+    .ace_print-margin {
+      display: none;
+    }
+  }
 }
 </style>

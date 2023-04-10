@@ -1,5 +1,5 @@
 <template>
-  <div class="attr-list v-talbe-attr">
+  <div class="attr-list">
     <CommonAttr></CommonAttr>
     <EditTable></EditTable>
     <el-form v-if="curComponent">
